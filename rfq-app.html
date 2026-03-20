@@ -1,0 +1,2117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Voigt-Abernathy Equipment RFQ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #eef0f3;
+      --bg-secondary: white;
+      --bg-header: #1a2744;
+      --bg-section: #fafbfc;
+      --text-primary: #333;
+      --text-secondary: #666;
+      --text-label: #1a2744;
+      --border-color: #b0bec5;
+      --border-light: #e0e6ed;
+      --accent-primary: #2e7de9;
+      --accent-dark: #1e5fb8;
+      --accent-bar: #2e7de9;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.dark {
+      --bg-primary: #0f1923;
+      --bg-secondary: #1a2535;
+      --bg-header: #0d1520;
+      --bg-section: #1e2d40;
+      --text-primary: #dce3ec;
+      --text-secondary: #8fa3b8;
+      --text-label: #dce3ec;
+      --border-color: #2a3d54;
+      --border-light: #344a60;
+      --accent-primary: #2e7de9;
+      --accent-dark: #1e5fb8;
+    }
+
+    .print-header {
+      display: none;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #1a2744;
+      padding-bottom: 10px;
+    }
+
+    header {
+      background-color: var(--bg-header);
+      color: white;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-top: 4px solid var(--accent-bar);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .header-left {
+      flex: 1;
+    }
+
+    .header-right {
+      display: flex;
+      gap: 12px;
+    }
+
+    header h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    header .header-subtitle {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.85;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .theme-toggle {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 3px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255,255,255,0.15);
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .equipment-selector {
+      margin-bottom: 32px;
+    }
+
+    .equipment-selector label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-label);
+      margin-bottom: 8px;
+    }
+
+    #equipmentSelect {
+      padding: 12px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 3px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      width: 100%;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    #equipmentSelect:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(46, 125, 233, 0.1);
+    }
+
+    body.dark #equipmentSelect {
+      background-color: #243044;
+      color: var(--text-primary);
+      border-color: var(--border-light);
+    }
+
+    /* Header Fields */
+    .header-fields {
+      background: var(--bg-secondary);
+      border-radius: 3px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border-top: 3px solid #1a2744;
+    }
+
+    .header-fields h3 {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      color: var(--text-label);
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .header-fields-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      color: var(--text-label);
+    }
+
+    .required::after {
+      content: " *";
+      color: #dc3545;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    input[type="email"],
+    input[type="tel"],
+    select,
+    textarea {
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 3px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      transition: all 0.2s ease;
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+
+    body.dark input[type="text"],
+    body.dark input[type="number"],
+    body.dark input[type="date"],
+    body.dark input[type="email"],
+    body.dark input[type="tel"],
+    body.dark select,
+    body.dark textarea {
+      background-color: #243044;
+      color: var(--text-primary);
+      border-color: var(--border-light);
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    input[type="date"]:focus,
+    input[type="email"]:focus,
+    input[type="tel"]:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(46, 125, 233, 0.1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    /* Form Sections */
+    .form-sections {
+      display: none;
+    }
+
+    .form-sections.active {
+      display: block;
+    }
+
+    .form-card {
+      background: var(--bg-secondary);
+      border-radius: 3px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      overflow: hidden;
+      border-top: 3px solid #1a2744;
+    }
+
+    .section-header {
+      padding: 16px;
+      background: var(--bg-section);
+      border-left: 4px solid var(--accent-primary);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      user-select: none;
+      transition: background-color 0.2s ease;
+    }
+
+    .section-header:hover {
+      background-color: rgba(46, 125, 233, 0.05);
+    }
+
+    .section-header h4 {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-label);
+    }
+
+    .section-toggle {
+      font-size: 16px;
+      transition: transform 0.2s ease;
+    }
+
+    .section-toggle.open {
+      transform: rotate(180deg);
+    }
+
+    .section-content {
+      padding: 20px;
+      display: none;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .section-content.open {
+      display: block;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .section-grid.two-col {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+
+    /* Radio & Toggle */
+    .radio-group,
+    .toggle-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .radio-option,
+    .toggle-option {
+      flex: 1;
+      min-width: 80px;
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+      display: none;
+    }
+
+    .radio-label,
+    .toggle-label {
+      display: block;
+      padding: 10px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 3px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+
+    input[type="radio"]:checked + .radio-label,
+    input[type="checkbox"]:checked + .toggle-label {
+      background-color: var(--accent-primary);
+      color: white;
+      border-color: var(--accent-primary);
+    }
+
+    /* Chips for multi-select */
+    .chip-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 8px;
+    }
+
+    .chip {
+      position: relative;
+    }
+
+    .chip-label {
+      display: block;
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 3px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+    }
+
+    .chip input[type="checkbox"]:checked + .chip-label {
+      background-color: var(--accent-primary);
+      color: white;
+      border-color: var(--accent-primary);
+    }
+
+    /* Actions */
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 3px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    button.primary {
+      background-color: var(--accent-primary);
+      color: white;
+    }
+
+    button.primary:hover {
+      background-color: var(--accent-dark);
+    }
+
+    button.secondary {
+      background-color: var(--bg-section);
+      color: var(--text-label);
+      border: 1px solid var(--border-light);
+    }
+
+    button.secondary:hover {
+      background-color: rgba(46, 125, 233, 0.1);
+    }
+
+    body.dark button.secondary {
+      background-color: #243044;
+      color: var(--text-primary);
+    }
+
+    button.danger {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    button.danger:hover {
+      background-color: #c82333;
+    }
+
+    button.crm-btn {
+      background-color: #f37021;
+      color: white;
+    }
+    button.crm-btn:hover {
+      background-color: #d95e10;
+    }
+
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #1a2744;
+      color: white;
+      padding: 14px 20px;
+      border-radius: 3px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      font-size: 13px;
+      z-index: 1000;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--bg-secondary);
+      padding: 24px;
+      border-radius: 3px;
+      max-width: 400px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    }
+
+    .modal-content h3 {
+      margin-bottom: 12px;
+      color: var(--text-label);
+      font-size: 16px;
+    }
+
+    .modal-content p {
+      margin-bottom: 20px;
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .modal-buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .header-right {
+        width: 100%;
+      }
+
+      header h1 {
+        font-size: 24px;
+      }
+
+      .container {
+        padding: 16px;
+      }
+
+      .header-fields-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .actions {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-buttons {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Print */
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+
+      body {
+        background: white;
+      }
+
+      header {
+        background: white;
+        color: #1a2744;
+        border: none;
+      }
+
+      header h1 {
+        color: #1a2744;
+      }
+
+      .print-header {
+        display: block;
+      }
+
+      .form-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        page-break-inside: avoid;
+      }
+
+      .section-content {
+        display: block !important;
+      }
+
+      .section-header {
+        background: white;
+      }
+
+      .container {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <div class="header-subtitle">Equipment Application Data Form</div>
+      <h1>Voigt-Abernathy Equipment RFQ</h1>
+      <p>Professional application data collection for equipment quotes</p>
+    </div>
+    <div class="header-right">
+      <button class="theme-toggle no-print" id="themeToggle" onclick="toggleTheme()">LIGHT / DARK</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="print-header">Voigt-Abernathy | Equipment Application Data</div>
+
+    <!-- Equipment Selector -->
+    <div class="equipment-selector no-print">
+      <label for="equipmentSelect">Select Equipment Type</label>
+      <select id="equipmentSelect" onchange="selectEquipmentFromDropdown()">
+        <option value="">— Select Equipment Type —</option>
+        <optgroup label="PUMPS">
+          <option value="centrifugal-pump">Pump — Centrifugal</option>
+          <option value="pd-pump">Pump — Positive Displacement</option>
+          <option value="metering-pump">Pump — Metering / Dosing</option>
+          <option value="aodd-pump">Pump — AODD (Air-Operated Double Diaphragm)</option>
+          <option value="liquid-ring-vacuum">Pump — Liquid Ring Vacuum</option>
+        </optgroup>
+        <optgroup label="VACUUM &amp; COMPRESSION">
+          <option value="dry-vacuum">Vacuum — Dry Running</option>
+          <option value="eductor-vacuum">Vacuum — Eductor</option>
+          <option value="reciprocating-compressor">Compressor — Reciprocating</option>
+        </optgroup>
+        <optgroup label="HEAT TRANSFER &amp; MIXING">
+          <option value="heat-exchanger">Heat Exchanger</option>
+          <option value="mixer">Mixer</option>
+        </optgroup>
+        <optgroup label="FILTRATION">
+          <option value="filter-press">Filter Press</option>
+          <option value="filtration-strainer">Filtration / Strainer</option>
+        </optgroup>
+        <optgroup label="ACCESSORIES">
+          <option value="pulsation-dampener">Pulsation Dampener</option>
+          <option value="expansion-joint">Expansion Joint</option>
+          <option value="airlock-valve">Rotary Airlock Valve</option>
+        </optgroup>
+        <optgroup label="TANKS &amp; SOLIDS">
+          <option value="pe-tank">Tank — Polyethylene</option>
+          <option value="asme-tank">Tank — ASME / Pressure Vessel</option>
+          <option value="pneumatic-conveying">Solids — Pneumatic Conveying</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <!-- Header Fields (always visible) -->
+    <div class="header-fields">
+      <h3>Customer Information</h3>
+      <div class="header-fields-grid">
+        <div class="form-group">
+          <label class="required">Customer Name</label>
+          <input type="text" id="headerCustomerName" placeholder="e.g., John Smith">
+        </div>
+        <div class="form-group">
+          <label class="required">Company</label>
+          <input type="text" id="headerCompany" placeholder="e.g., Acme Chemical Corp">
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" id="headerPhone" placeholder="(555) 123-4567">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="headerEmail" placeholder="john@example.com">
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="headerDate">
+        </div>
+        <div class="form-group">
+          <label>Project / Tag #</label>
+          <input type="text" id="headerProjectTag" placeholder="e.g., PROJ-2026-001">
+        </div>
+        <div class="form-group">
+          <label>Rep</label>
+          <select id="headerRep">
+            <option value="Daniel Fouquet — Voigt-Abernathy" selected>Daniel Fouquet</option>
+            <option value="Matt Jones — Voigt-Abernathy">Matt Jones</option>
+            <option value="Aaron Rapp — Voigt-Abernathy">Aaron Rapp</option>
+            <option value="Kirby — Voigt-Abernathy">Kirby</option>
+            <option value="Tony — Voigt-Abernathy">Tony</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Inside Sales (Assigned To)</label>
+          <input type="text" id="headerInsideSales" list="insideSalesList" placeholder="Select or type name...">
+          <datalist id="insideSalesList">
+            <option value="Unassigned">
+            <option value="Sarah">
+            <option value="Mike">
+            <option value="Inside Sales Team">
+          </datalist>
+        </div>
+        <div class="form-group">
+          <label>Notes</label>
+          <textarea id="headerNotes" placeholder="Any additional notes..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Sections (dynamic) -->
+    <div class="form-sections" id="formSections"></div>
+
+    <!-- Action Buttons -->
+    <div class="actions no-print">
+      <button class="primary" id="copyBtn" onclick="copyToClipboard()">
+        Copy to Clipboard
+      </button>
+      <button class="secondary" id="printBtn" onclick="window.print()">
+        Print / Save PDF
+      </button>
+      <button class="primary" id="emailBtn" onclick="emailToInsideSales()">
+        Email to Inside Sales
+      </button>
+      <button class="crm-btn" id="crmBtn" onclick="logToCRM()">
+        Log to CRM
+      </button>
+      <button class="danger" id="clearBtn" onclick="showClearConfirm()">
+        Clear Form
+      </button>
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast" style="display: none;"></div>
+
+  <!-- Clear confirmation modal -->
+  <div class="modal" id="clearModal">
+    <div class="modal-content">
+      <h3>Clear Form?</h3>
+      <p>This will delete all entered data. This action cannot be undone.</p>
+      <div class="modal-buttons">
+        <button class="secondary" onclick="closeClearConfirm()">Cancel</button>
+        <button class="danger" onclick="clearForm()">Clear All</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CRM Log Modal -->
+  <div class="modal" id="crmModal">
+    <div class="modal-content" style="max-width: 560px;">
+      <h3>Log to CRM</h3>
+      <p style="margin-bottom: 14px; color: #666; font-size: 13px;">Copy the note below and paste it into the HubSpot contact or deal record, or click "Open in HubSpot" to search for the record directly.</p>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; font-size: 13px;">
+        <div><strong>Company:</strong> <span id="crmModalCompany"></span></div>
+        <div><strong>Equipment:</strong> <span id="crmModalEquipment"></span></div>
+        <div><strong>Rep:</strong> <span id="crmModalRep"></span></div>
+        <div><strong>Date:</strong> <span id="crmModalDate"></span></div>
+      </div>
+      <textarea id="crmNoteText" style="width:100%; height:180px; font-size:12px; font-family:monospace; margin-bottom:14px;" readonly></textarea>
+      <div class="modal-buttons" style="grid-template-columns: 1fr 1fr 1fr;">
+        <button class="secondary" onclick="closeCRMModal()">Close</button>
+        <button class="primary" onclick="copyCRMNote()">Copy Note</button>
+        <a id="crmHubspotLink" href="#" target="_blank" style="text-decoration:none;">
+          <button class="crm-btn" style="width:100%;">Open HubSpot</button>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Theme toggle
+    function toggleTheme() {
+      const body = document.body;
+      const isDark = body.classList.contains('dark');
+      if (isDark) {
+        body.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      } else {
+        body.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    // Load theme preference
+    function loadTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      if (savedTheme === 'dark') {
+        document.body.classList.add('dark');
+      }
+    }
+
+    // Set today's date
+    document.getElementById('headerDate').valueAsDate = new Date();
+
+    // ===== EQUIPMENT SCHEMAS =====
+    const equipmentTypes = [
+      {
+        id: 'centrifugal-pump',
+        label: 'Pump — Centrifugal',
+        sections: [
+          {
+            title: 'Fluid Properties',
+            fields: [
+              { id: 'fluidName', label: 'Fluid/Liquid Name', type: 'text', required: true },
+              { id: 'fluidTemp', label: 'Pumping Temperature', type: 'number', unit: '°F', required: true },
+              { id: 'specificGravity', label: 'Specific Gravity', type: 'number', required: true },
+              { id: 'viscosity', label: 'Viscosity', type: 'number', unit: 'cP' },
+              { id: 'vaporPressure', label: 'Vapor Pressure', type: 'number', unit: 'psia' },
+              { id: 'pH', label: 'pH', type: 'number' },
+              { id: 'solidsPercent', label: '% Solids by Weight', type: 'number' },
+              { id: 'particleSize', label: 'Max Particle Size', type: 'number', unit: 'microns' },
+              { id: 'hazardous', label: 'Hazardous/Flammable?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'specialChar', label: 'Special Characteristics', type: 'text' }
+            ]
+          },
+          {
+            title: 'Performance Requirements',
+            fields: [
+              { id: 'flowRate', label: 'Flow Rate', type: 'number', unit: 'GPM', required: true },
+              { id: 'totalHead', label: 'Total Differential Head', type: 'number', unit: 'ft' },
+              { id: 'suctionPressure', label: 'Suction Pressure', type: 'number', unit: 'psig' },
+              { id: 'dischargePressure', label: 'Discharge Pressure', type: 'number', unit: 'psig' },
+              { id: 'npsh', label: 'NPSH Available', type: 'number', unit: 'ft' },
+              { id: 'service', label: 'Service', type: 'radio', options: ['Continuous', 'Intermittent'] },
+              { id: 'startsPerDay', label: 'Starts per day (if intermittent)', type: 'number' }
+            ]
+          },
+          {
+            title: 'Site / Installation',
+            fields: [
+              { id: 'location', label: 'Location', type: 'radio', options: ['Indoor', 'Outdoor'] },
+              { id: 'elevation', label: 'Elevation', type: 'number', unit: 'ft ASL' },
+              { id: 'ambientTempMin', label: 'Ambient Temp Min', type: 'number', unit: '°F' },
+              { id: 'ambientTempMax', label: 'Ambient Temp Max', type: 'number', unit: '°F' },
+              { id: 'areaClass', label: 'Area Classification', type: 'select', options: ['Non-Hazardous', 'Class I Div 1', 'Class I Div 2'] },
+              { id: 'voltage', label: 'Voltage', type: 'text', unit: 'V' },
+              { id: 'phase', label: 'Phase', type: 'select', options: ['1ph', '3ph'] },
+              { id: 'frequency', label: 'Frequency', type: 'select', options: ['60', '50'] }
+            ]
+          },
+          {
+            title: 'Mechanical',
+            fields: [
+              { id: 'suctionSize', label: 'Suction Connection Size', type: 'text', unit: 'in.' },
+              { id: 'dischargeSize', label: 'Discharge Connection Size', type: 'text', unit: 'in.' },
+              { id: 'casingMaterial', label: 'Preferred Casing Material', type: 'text' },
+              { id: 'impellerMaterial', label: 'Preferred Impeller Material', type: 'text' },
+              { id: 'sealType', label: 'Seal Type', type: 'select', options: ['Mechanical Seal', 'Packing', 'Mag Drive'] },
+              { id: 'drive', label: 'Drive', type: 'select', options: ['Direct', 'Belt', 'VFD'] }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'pd-pump',
+        label: 'Pump — Positive Displacement',
+        sections: [
+          {
+            title: 'Fluid Properties',
+            fields: [
+              { id: 'fluidName', label: 'Fluid/Liquid Name', type: 'text', required: true },
+              { id: 'viscosity', label: 'Viscosity', type: 'number', unit: 'cP or SSU', required: true },
+              { id: 'specificGravity', label: 'Specific Gravity', type: 'number' },
+              { id: 'vaporPressure', label: 'Vapor Pressure', type: 'number', unit: 'psia' },
+              { id: 'pumpTemp', label: 'Pumping Temperature', type: 'number', unit: '°F', required: true },
+              { id: 'pH', label: 'pH', type: 'number' },
+              { id: 'lubricating', label: 'Lubricating Properties?', type: 'radio', options: ['Yes', 'No'], required: true },
+              { id: 'corrosive', label: 'Corrosive?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'abrasive', label: 'Abrasive?', type: 'radio', options: ['Yes', 'No'], required: true },
+              { id: 'particleSize', label: 'Particle Size', type: 'number', unit: 'microns' },
+              { id: 'particleConc', label: 'Particle Concentration', type: 'number', unit: '% by weight' },
+              { id: 'particleHardness', label: 'Particle Hardness', type: 'select', options: ['Soft', 'Medium', 'Hard', 'Very Hard'] },
+              { id: 'solidifies', label: 'Product Solidifies?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'settles', label: 'Solids Settle Out?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'shearSensitive', label: 'Shear Sensitive?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'heatSensitive', label: 'Heat Sensitive?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'heatingJackets', label: 'Heating Jackets Needed?', type: 'radio', options: ['Yes', 'No'] }
+            ]
+          },
+          {
+            title: 'Operating Conditions',
+            fields: [
+              { id: 'flowRate', label: 'Flow Rate', type: 'number', unit: 'GPM', required: true },
+              { id: 'inletPressure', label: 'Inlet Pressure', type: 'number', unit: 'psig', required: true },
+              { id: 'diffPressure', label: 'Differential Pressure', type: 'number', unit: 'psig', required: true },
+              { id: 'npsh', label: 'NPSH Available', type: 'number', unit: 'ft' },
+              { id: 'workingPressure', label: 'Working Pressure', type: 'number', unit: 'psig' },
+              { id: 'dutyCycle', label: 'Duty Cycle', type: 'number', unit: 'hrs/day' },
+              { id: 'selfPrime', label: 'Self-Prime Required?', type: 'radio', options: ['Yes', 'No'], required: true },
+              { id: 'maxSuctionLift', label: 'Max Suction Lift', type: 'number', unit: 'ft' }
+            ]
+          },
+          {
+            title: 'Installation',
+            fields: [
+              { id: 'location', label: 'Location', type: 'select', options: ['Indoor', 'Outdoor', 'Outdoor-Protected'] },
+              { id: 'elevation', label: 'Elevation', type: 'number', unit: 'ft ASL' },
+              { id: 'ambientTempMin', label: 'Ambient Temp Min', type: 'number', unit: '°F' },
+              { id: 'ambientTempMax', label: 'Ambient Temp Max', type: 'number', unit: '°F' },
+              { id: 'voltage', label: 'Voltage', type: 'text', unit: 'V' },
+              { id: 'phase', label: 'Phase', type: 'select', options: ['1ph', '3ph'] },
+              { id: 'frequency', label: 'Frequency', type: 'select', options: ['60', '50'] },
+              { id: 'motorEnclosure', label: 'Motor Enclosure', type: 'select', options: ['TEFC', 'Explosion Proof', 'Other'] },
+              { id: 'areaClass', label: 'Area Classification', type: 'select', options: ['Non-Hazardous', 'Class I Div 1', 'Class I Div 2'] }
+            ]
+          },
+          {
+            title: 'Shaft Sealing',
+            fields: [
+              { id: 'sealType', label: 'Seal Type', type: 'select', options: ['Packed', 'Lip Seal', 'Mechanical Seal'] }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'metering-pump',
+        label: 'Pump — Metering / Dosing',
+        sections: [
+          {
+            title: 'Chemical Information',
+            fields: [
+              { id: 'processFluid', label: 'Process Fluid/Chemical', type: 'text', required: true },
+              { id: 'concentration', label: 'Concentration', type: 'number', unit: '%' },
+              { id: 'tempMin', label: 'Fluid Temp Min', type: 'number', unit: '°F' },
+              { id: 'tempMax', label: 'Fluid Temp Max', type: 'number', unit: '°F' },
+              { id: 'viscosity', label: 'Viscosity', type: 'number', unit: 'cP' },
+              { id: 'specificGravity', label: 'Specific Gravity', type: 'number' },
+              { id: 'solidsContent', label: 'Solids Content', type: 'number', unit: '%' },
+              { id: 'flammable', label: 'Flammable/Explosive?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'offGasses', label: 'Chemical Off-Gasses?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'headMaterial', label: 'Pump Head Material Compatibility', type: 'checkboxes', options: ['PVC', 'PVDF', 'PP', '316SS'] },
+              { id: 'pipingMaterial', label: 'Piping Material Compatibility', type: 'checkboxes', options: ['PVC', 'CPVC', 'PVDF', '316SS'] },
+              { id: 'sealMaterial', label: 'Seal Material Compatibility', type: 'checkboxes', options: ['EPDM', 'Viton', 'PTFE'] }
+            ]
+          },
+          {
+            title: 'Pump Requirements',
+            fields: [
+              { id: 'numPumps', label: 'Number of Pumps', type: 'number' },
+              { id: 'capacityMin', label: 'Required Capacity Min', type: 'number', unit: 'GPH', required: true },
+              { id: 'capacityMax', label: 'Required Capacity Max', type: 'number', unit: 'GPH', required: true },
+              { id: 'pressureMax', label: 'Required Pressure Max', type: 'number', unit: 'PSI', required: true },
+              { id: 'suctionCondition', label: 'Suction Conditions', type: 'radio', options: ['Suction Lift', 'Flooded Suction'] },
+              { id: 'suctionLift', label: 'Suction Lift/Head', type: 'number', unit: 'ft' },
+              { id: 'dischargeHead', label: 'Discharge Head', type: 'number', unit: 'ft' },
+              { id: 'controlType', label: 'Control Type', type: 'select', options: ['Manual', 'Pulse', '4-20mA', 'Stroke Positioner'] }
+            ]
+          },
+          {
+            title: 'Skid / System',
+            fields: [
+              { id: 'pipingConfig', label: 'Piping Configuration', type: 'select', options: ['Single Pump', 'Dual Pump (Primary-Backup)', 'Dual Pump (Common Suction)', 'Three Pump', 'Other'] },
+              { id: 'skidMaterial', label: 'Skid Material', type: 'select', options: ['PP/PE', '304SS', 'FRP', 'Other'] },
+              { id: 'mountType', label: 'Mount Type', type: 'select', options: ['Wall Mount', 'Floor Mount'] },
+              { id: 'requiredComponents', label: 'Required Components', type: 'checkboxes', options: ['Wye Strainer', 'Basket Strainer', 'PRV', 'Calibration Column', 'Pulse Dampener', 'Flow Monitor', 'BPV', 'MFV'] }
+            ]
+          },
+          {
+            title: 'Electrical',
+            fields: [
+              { id: 'power', label: 'Power', type: 'select', options: ['120V 1ph', '220V 1ph', '230V 3ph', '460V 3ph', 'Other'] },
+              { id: 'controls', label: 'Controls', type: 'select', options: ['None', 'Terminal Box', 'Panel'] },
+              { id: 'enclosure', label: 'Enclosure', type: 'select', options: ['NEMA 4X', 'FRP', '304SS', '316SS'] },
+              { id: 'hazardous', label: 'Hazardous Location?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'classDiv', label: 'Class/Div/Group (if hazardous)', type: 'text' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'aodd-pump',
+        label: 'Pump — AODD (Air-Operated Double Diaphragm)',
+        sections: [
+          {
+            title: 'Fluid Properties',
+            fields: [
+              { id: 'fluidPumped', label: 'Fluid Pumped', type: 'text', required: true },
+              { id: 'specialChar', label: 'Special Characteristics', type: 'text' },
+              { id: 'specificGravity', label: 'Specific Gravity', type: 'number' },
+              { id: 'viscosity', label: 'Viscosity', type: 'number', unit: 'cP' },
+              { id: 'vaporPressure', label: 'Vapor Pressure', type: 'number', unit: 'psia' },
+              { id: 'suspendedSolids', label: '% Suspended Solids', type: 'number' },
+              { id: 'maxSolidsSize', label: 'Max Solids Size', type: 'number', unit: 'microns' }
+            ]
+          },
+          {
+            title: 'Performance',
+            fields: [
+              { id: 'flowRate', label: 'Flow Rate', type: 'number', unit: 'GPM', required: true },
+              { id: 'suctionPressure', label: 'Suction Pressure', type: 'number', unit: 'psig' },
+              { id: 'dischargePressure', label: 'Discharge Pressure', type: 'number', unit: 'psig' },
+              { id: 'diffPressure', label: 'Differential Pressure', type: 'number', unit: 'psig' },
+              { id: 'npsh', label: 'NPSH Available', type: 'number', unit: 'ft' },
+              { id: 'suctionLift', label: 'Suction Lift', type: 'number', unit: 'ft' },
+              { id: 'airPressure', label: 'Air Supply Pressure', type: 'number', unit: 'psig', required: true },
+              { id: 'service', label: 'Service', type: 'radio', options: ['Continuous', 'Intermittent'] },
+              { id: 'location', label: 'Location', type: 'radio', options: ['Indoor', 'Outdoor'] }
+            ]
+          },
+          {
+            title: 'Materials',
+            fields: [
+              { id: 'casingMaterial', label: 'Casing Material', type: 'select', options: ['Aluminum', 'Cast Iron', '316SS', 'Polypropylene', 'PVDF'] },
+              { id: 'diaphragmMaterial', label: 'Diaphragm Material', type: 'select', options: ['Buna-N', 'EPDM', 'Neoprene', 'PTFE', 'Santoprene', 'Viton'] },
+              { id: 'checkValveMaterial', label: 'Check Valve Material', type: 'text' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'liquid-ring-vacuum',
+        label: 'Pump — Liquid Ring Vacuum',
+        sections: [
+          {
+            title: 'Gas to be Handled',
+            fields: [
+              { id: 'gasName', label: 'Gas Name/Chemical Formula', type: 'text', required: true },
+              { id: 'composition', label: 'Composition', type: 'text' },
+              { id: 'molecularWeight', label: 'Molecular Weight', type: 'number' },
+              { id: 'specificImpurities', label: 'Specific Impurities', type: 'text' },
+              { id: 'gasCondenses', label: 'Gas Condenses in Pump?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'gasSoluble', label: 'Gas Soluble in Service Liquid?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'hazardous', label: 'Hazardous?', type: 'radio', options: ['Yes', 'No'] }
+            ]
+          },
+          {
+            title: 'Volume / Capacity',
+            fields: [
+              { id: 'flowRate', label: 'Flow Rate', type: 'number', unit: 'ACFM or SCFM', required: true },
+              { id: 'inletPressure', label: 'Inlet Pressure', type: 'text', required: true },
+              { id: 'inletTemp', label: 'Inlet Temperature', type: 'number', unit: '°F' },
+              { id: 'dischargePressure', label: 'Discharge Pressure', type: 'text' },
+              { id: 'evacuation', label: 'Evacuation Application?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'volumeEvacuate', label: 'Volume to Evacuate', type: 'number', unit: 'ft³' },
+              { id: 'fromPressure', label: 'From Pressure', type: 'text' },
+              { id: 'toPressure', label: 'To Pressure', type: 'text' },
+              { id: 'evacuationTime', label: 'Evacuation Time', type: 'number', unit: 'min' }
+            ]
+          },
+          {
+            title: 'Service Liquid',
+            fields: [
+              { id: 'liquidType', label: 'Liquid Type', type: 'text', required: true },
+              { id: 'liquidTemp', label: 'Temperature', type: 'number', unit: '°F' },
+              { id: 'liquidPressure', label: 'Pressure Available', type: 'text' },
+              { id: 'circulation', label: 'Circulation', type: 'select', options: ['Once-Through', 'Partial Recirculation', 'Total Recirculation'] },
+              { id: 'coolingMedia', label: 'Cooling Media (if total recirculation)', type: 'text' },
+              { id: 'coolingTemp', label: 'Cooling Media Temperature', type: 'number' }
+            ]
+          },
+          {
+            title: 'Site & Utilities',
+            fields: [
+              { id: 'elevation', label: 'Elevation', type: 'number', unit: 'ft ASL' },
+              { id: 'voltage', label: 'Voltage', type: 'text', unit: 'V' },
+              { id: 'phase', label: 'Phase', type: 'select', options: ['1ph', '3ph'] },
+              { id: 'frequency', label: 'Frequency', type: 'select', options: ['60', '50'] },
+              { id: 'motorEnclosure', label: 'Motor Enclosure', type: 'text' },
+              { id: 'electricalClass', label: 'Electrical Classification', type: 'text' },
+              { id: 'pumpMaterials', label: 'Pump Materials', type: 'text' },
+              { id: 'requiredAccessories', label: 'Required Accessories', type: 'checkboxes', options: ['Heat Exchanger', 'Separator', 'Piping', 'Instrumentation'] }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'dry-vacuum',
+        label: 'Vacuum — Dry Running',
+        sections: [
+          {
+            title: 'Application',
+            fields: [
+              { id: 'description', label: 'Description', type: 'textarea', required: true },
+              { id: 'operationMode', label: 'Operation Mode', type: 'radio', options: ['Batch', 'Continuous'] }
+            ]
+          },
+          {
+            title: 'Process Data',
+            fields: [
+              { id: 'pressureMin', label: 'Operating Pressure Min', type: 'number', unit: 'Torr abs', required: true },
+              { id: 'pressureNormal', label: 'Operating Pressure Normal', type: 'number', unit: 'Torr abs' },
+              { id: 'pressureMax', label: 'Operating Pressure Max', type: 'number', unit: 'Torr abs' },
+              { id: 'ultimatePressure', label: 'Required Ultimate Pressure', type: 'number', unit: 'Torr abs' },
+              { id: 'exhaustMin', label: 'Exhaust Pressure Min', type: 'number', unit: 'Torr g' },
+              { id: 'exhaustNormal', label: 'Exhaust Pressure Normal', type: 'number', unit: 'Torr g' },
+              { id: 'exhaustMax', label: 'Exhaust Pressure Max', type: 'number', unit: 'Torr g' },
+              { id: 'capacity', label: 'Capacity at Normal Operating Pressure', type: 'number', unit: 'ACFM', required: true },
+              { id: 'suctionTempMin', label: 'Suction Temp Min', type: 'number', unit: '°F' },
+              { id: 'suctionTempNormal', label: 'Suction Temp Normal', type: 'number', unit: '°F' },
+              { id: 'suctionTempMax', label: 'Suction Temp Max', type: 'number', unit: '°F' },
+              { id: 'evacuationTime', label: 'Evacuation Time to Normal Operating Pressure', type: 'number', unit: 'min' },
+              { id: 'reactorVolume', label: 'Reactor Volume', type: 'number', unit: 'ft³' },
+              { id: 'leakageAir', label: 'Leakage Air', type: 'number', unit: 'kg/h' }
+            ]
+          },
+          {
+            title: 'Hazardous Classification',
+            fields: [
+              { id: 'insideSafe', label: 'Inside', type: 'radio', options: ['Safe', 'Div 1', 'Div 2'] },
+              { id: 'insideGroup', label: 'Inside Group', type: 'select', options: ['A', 'B', 'C', 'D'] },
+              { id: 'outsideSafe', label: 'Outside', type: 'radio', options: ['Safe', 'Div 1', 'Div 2'] },
+              { id: 'outsideGroup', label: 'Outside Group', type: 'select', options: ['A', 'B', 'C', 'D'] }
+            ]
+          },
+          {
+            title: 'Utilities',
+            fields: [
+              { id: 'voltage', label: 'Voltage (V AC)', type: 'text' },
+              { id: 'frequency', label: 'Frequency', type: 'select', options: ['60', '50'] },
+              { id: 'control24V', label: 'Control Voltage 24V DC Available?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'nitrogenAvailable', label: 'Nitrogen Available (44-87 PSI)?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'coolingWaterSupply', label: 'Cooling Water Supply Temp', type: 'number', unit: '°F' },
+              { id: 'coolingWaterReturn', label: 'Cooling Water Return Temp', type: 'number', unit: '°F' },
+              { id: 'coolingWaterPressure', label: 'Cooling Water Supply Pressure', type: 'number', unit: 'PSI' },
+              { id: 'vfd', label: 'Speed Variation (VFD)?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'dcsControl', label: 'DCS Control?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'localDisplay', label: 'Local Display?', type: 'radio', options: ['Yes', 'No'] }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'eductor-vacuum',
+        label: 'Vacuum — Eductor',
+        sections: [
+          {
+            title: 'Ejector Function',
+            fields: [
+              { id: 'purpose', label: 'Purpose', type: 'radio', options: ['Vacuum Pump', 'Evacuation or Pump Priming'], required: true }
+            ]
+          },
+          {
+            title: 'Motive Liquid',
+            fields: [
+              { id: 'liquidType', label: 'Liquid Type', type: 'text', required: true },
+              { id: 'specificGravity', label: 'Specific Gravity', type: 'number' },
+              { id: 'liquidTemp', label: 'Temperature', type: 'number', unit: '°F' },
+              { id: 'flowRate', label: 'Flow Rate', type: 'number', unit: 'GPM', required: true },
+              { id: 'pressure', label: 'Pressure', type: 'number', unit: 'psig', required: true }
+            ]
+          },
+          {
+            title: 'Suction Gas',
+            fields: [
+              { id: 'gasType', label: 'Gas Type', type: 'text', required: true },
+              { id: 'molecularWeight', label: 'Molecular Weight', type: 'number' },
+              { id: 'gasTemp', label: 'Temperature', type: 'number', unit: '°F' },
+              { id: 'suctionPressure', label: 'Suction Pressure', type: 'number', unit: 'psia', required: true },
+              { id: 'gasFlowRate', label: 'Flow Rate', type: 'number', unit: 'lb/hr' },
+              { id: 'finalPressure', label: 'Final Pressure (if vacuum pump)', type: 'number', unit: 'psig' },
+              { id: 'volumeEvacuate', label: 'Volume to Evacuate (if evacuation)', type: 'number', unit: 'ft³' },
+              { id: 'evacuationTime', label: 'Evacuation Time', type: 'number', unit: 'min' }
+            ]
+          },
+          {
+            title: 'Discharge',
+            fields: [
+              { id: 'dischargePressure', label: 'Discharge Pressure', type: 'number', unit: 'psig' }
+            ]
+          },
+          {
+            title: 'Construction',
+            fields: [
+              { id: 'endConnections', label: 'End Connections', type: 'select', options: ['NPT', 'Flanges', 'Other'] },
+              { id: 'material', label: 'Material', type: 'select', options: ['Carbon Steel', 'Stainless Steel', 'PVC', 'Teflon', 'Other'] }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'reciprocating-compressor',
+        label: 'Compressor — Reciprocating',
+        sections: [
+          {
+            title: 'Purpose / Application',
+            fields: [
+              { id: 'purpose', label: 'Purpose of Compressor', type: 'textarea', required: true },
+              { id: 'operatingConditions', label: 'What Causes Different Operating Conditions?', type: 'text' },
+              { id: 'cycleTime', label: 'Time for One ON/OFF Cycle', type: 'text' },
+              { id: 'cyclesPerDay', label: '# of Cycles per Day', type: 'number' }
+            ]
+          },
+          {
+            title: 'Site Data',
+            fields: [
+              { id: 'siteLocation', label: 'Site Location', type: 'text' },
+              { id: 'elevation', label: 'Elevation', type: 'number', unit: 'ft' },
+              { id: 'ambientTempMin', label: 'Ambient Temp Min', type: 'number', unit: '°F' },
+              { id: 'ambientTempMax', label: 'Ambient Temp Max', type: 'number', unit: '°F' },
+              { id: 'voltage', label: 'Voltage', type: 'text', unit: 'V' },
+              { id: 'phase', label: 'Phase', type: 'select', options: ['1ph', '3ph'] },
+              { id: 'frequency', label: 'Frequency', type: 'select', options: ['60', '50'] },
+              { id: 'controlVoltage', label: 'Control Voltage', type: 'text' },
+              { id: 'areaClass', label: 'Area Class', type: 'text' },
+              { id: 'areaGroup', label: 'Area Group', type: 'text' },
+              { id: 'areaDivision', label: 'Area Division', type: 'text' },
+              { id: 'motorEnclosure', label: 'Motor Enclosure', type: 'text' },
+              { id: 'coolingWater', label: 'Cooling Water Available?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'coolingWaterTemp', label: 'Cooling Water Temp', type: 'number', unit: '°F' }
+            ]
+          },
+          {
+            title: 'Gas Mixture',
+            fields: [
+              { id: 'gasName1', label: 'Gas Name 1', type: 'text' },
+              { id: 'gasPercent1', label: '% by Volume 1', type: 'number' },
+              { id: 'gasName2', label: 'Gas Name 2', type: 'text' },
+              { id: 'gasPercent2', label: '% by Volume 2', type: 'number' },
+              { id: 'gasName3', label: 'Gas Name 3', type: 'text' },
+              { id: 'gasPercent3', label: '% by Volume 3', type: 'number' }
+            ]
+          },
+          {
+            title: 'Operating Conditions (Condition 1)',
+            fields: [
+              { id: 'cond1InletPressure', label: 'Inlet Pressure', type: 'number', unit: 'psig' },
+              { id: 'cond1InletTempMin', label: 'Inlet Temp Min', type: 'number', unit: '°F' },
+              { id: 'cond1InletTempMax', label: 'Inlet Temp Max', type: 'number', unit: '°F' },
+              { id: 'cond1DischargePressure', label: 'Discharge Pressure', type: 'number', unit: 'psig' },
+              { id: 'cond1Capacity', label: 'Capacity', type: 'number', unit: 'ACFM' },
+              { id: 'cond1Gas', label: 'Gas Name', type: 'text' }
+            ]
+          },
+          {
+            title: 'Scope of Supply',
+            fields: [
+              { id: 'scopeSupply', label: 'Scope of Supply', type: 'checkboxes', options: ['Base & Drive', 'Driver', 'Low Oil Pressure Switch', 'High Discharge Temp Switch', 'Suction Pressure Switch', 'Discharge Pressure Switch', 'Liquid Trap', 'Level Switch', '4-Way Valve', 'Suction Strainer', 'Relief Valve'] }
+            ]
+          },
+          {
+            title: 'Control Panel',
+            fields: [
+              { id: 'controlPanel', label: 'Control Panel Type', type: 'radio', options: ['Starter Complete', 'Alarm & Shutdown with Motor Starter', 'Terminal Box'] }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'heat-exchanger',
+        label: 'Heat Exchanger',
+        sections: [
+          {
+            title: 'Service Information',
+            fields: [
+              { id: 'serviceDesc', label: 'Service/Duty Description', type: 'textarea', required: true },
+              { id: 'projectNumber', label: 'Job/Project Number', type: 'text' },
+              { id: 'heatExchanged', label: 'Heat Exchanged', type: 'number', unit: 'BTU/hr' }
+            ]
+          },
+          {
+            title: 'Shell Side',
+            fields: [
+              { id: 'shellFluid', label: 'Fluid Name', type: 'text', required: true },
+              { id: 'shellFlowRate', label: 'Total Flow Rate', type: 'number', unit: 'lb/hr', required: true },
+              { id: 'shellTempIn', label: 'Temperature In', type: 'number', unit: '°F', required: true },
+              { id: 'shellTempOut', label: 'Temperature Out', type: 'number', unit: '°F', required: true },
+              { id: 'shellSpecificGravity', label: 'Specific Gravity', type: 'number' },
+              { id: 'shellViscosity', label: 'Viscosity', type: 'number', unit: 'cP' },
+              { id: 'shellInletPressure', label: 'Inlet Pressure', type: 'number', unit: 'psia' },
+              { id: 'shellPressureDrop', label: 'Allowable Pressure Drop', type: 'number', unit: 'psi' },
+              { id: 'shellFouling', label: 'Fouling Resistance', type: 'number', unit: 'hr·ft²·°F/BTU' }
+            ]
+          },
+          {
+            title: 'Tube Side',
+            fields: [
+              { id: 'tubeFluid', label: 'Fluid Name', type: 'text', required: true },
+              { id: 'tubeFlowRate', label: 'Total Flow Rate', type: 'number', unit: 'lb/hr', required: true },
+              { id: 'tubeTempIn', label: 'Temperature In', type: 'number', unit: '°F', required: true },
+              { id: 'tubeTempOut', label: 'Temperature Out', type: 'number', unit: '°F', required: true },
+              { id: 'tubeSpecificGravity', label: 'Specific Gravity', type: 'number' },
+              { id: 'tubeViscosity', label: 'Viscosity', type: 'number', unit: 'cP' },
+              { id: 'tubeInletPressure', label: 'Inlet Pressure', type: 'number', unit: 'psia' },
+              { id: 'tubePressureDrop', label: 'Allowable Pressure Drop', type: 'number', unit: 'psi' },
+              { id: 'tubeFouling', label: 'Fouling Resistance', type: 'number' }
+            ]
+          },
+          {
+            title: 'Design Requirements',
+            fields: [
+              { id: 'designPressureShell', label: 'Design Pressure Shell', type: 'number', unit: 'psig' },
+              { id: 'designPressureTube', label: 'Design Pressure Tube', type: 'number', unit: 'psig' },
+              { id: 'designTempMax', label: 'Design Temp Max', type: 'number', unit: '°F' },
+              { id: 'designTempMin', label: 'Design Temp Min', type: 'number', unit: '°F' },
+              { id: 'corrosionAllowance', label: 'Corrosion Allowance', type: 'number', unit: 'in.' },
+              { id: 'shellMaterial', label: 'Shell Material', type: 'text' },
+              { id: 'tubeMaterial', label: 'Tube Material', type: 'text' },
+              { id: 'shellPasses', label: 'Number of Shell Passes', type: 'number' },
+              { id: 'tubePasses', label: 'Number of Tube Passes', type: 'number' },
+              { id: 'codeRequirements', label: 'Code Requirements', type: 'text' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'mixer',
+        label: 'Mixer',
+        sections: [
+          {
+            title: 'Application',
+            fields: [
+              { id: 'marketIndustry', label: 'Market/Industry', type: 'text' },
+              { id: 'appDescription', label: 'Application Description', type: 'textarea', required: true },
+              { id: 'mixingObjective', label: 'Mixing Objective', type: 'checkboxes', options: ['Blending', 'Solid Suspension', 'Emulsification', 'Flash Mixing', 'Flocculation', 'Dispersion'] },
+              { id: 'operation', label: 'Operation', type: 'radio', options: ['Batch', 'Continuous'] },
+              { id: 'batchTime', label: 'Batch Time (if batch)', type: 'number', unit: 'min' },
+              { id: 'flowRate', label: 'Flow Rate (if continuous)', type: 'number', unit: 'GPM' }
+            ]
+          },
+          {
+            title: 'Vessel',
+            fields: [
+              { id: 'basicShape', label: 'Basic Shape', type: 'select', options: ['Cylindrical', 'Rectangular', 'Horizontal Cylinder', 'IBC Tote', '55-Gallon Drum'], required: true },
+              { id: 'volume', label: 'Volume', type: 'number', unit: 'gallons', required: true },
+              { id: 'tankType', label: 'Tank Type', type: 'radio', options: ['Open', 'Closed'] },
+              { id: 'diameter', label: 'Diameter', type: 'number', unit: 'in.' },
+              { id: 'straightHeight', label: 'Straight Side Height', type: 'number', unit: 'in.' },
+              { id: 'maxWorkingLevel', label: 'Max Working Liquid Level', type: 'number', unit: 'in.' },
+              { id: 'minWorkingLevel', label: 'Min Working Liquid Level', type: 'number', unit: 'in.' },
+              { id: 'overallHeight', label: 'Overall Height', type: 'number', unit: 'in.' },
+              { id: 'baffles', label: 'Baffles?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'numBaffles', label: 'Number of Baffles', type: 'number' },
+              { id: 'topType', label: 'Top Type', type: 'select', options: ['Flat', 'Conical', 'Elliptical', 'Dish'] },
+              { id: 'bottomType', label: 'Bottom Type', type: 'select', options: ['Flat', 'Conical', 'Elliptical', 'Dish'] },
+              { id: 'dishDepth', label: 'Dish/Cone Depth', type: 'number', unit: 'in.' },
+              { id: 'flange', label: 'ANSI Flange Size & Class', type: 'text' },
+              { id: 'designPressureInt', label: 'Design Pressure INT', type: 'number', unit: 'psig' },
+              { id: 'designPressureExt', label: 'Design Pressure EXT', type: 'number', unit: 'psig' },
+              { id: 'designTempMin', label: 'Design Temp Min', type: 'number', unit: '°F' },
+              { id: 'designTempMax', label: 'Design Temp Max', type: 'number', unit: '°F' }
+            ]
+          },
+          {
+            title: 'Mounting',
+            fields: [
+              { id: 'mountingType', label: 'Mounting Type', type: 'select', options: ['Adj Beam Mount', 'Clamp', 'Flange', 'Fixed Plate', 'Tri-Clamp'] },
+              { id: 'mixerPosition', label: 'Mixer Position', type: 'select', options: ['Vertical Offset', 'Angled Offset', 'Side Entry', 'Center Baffled'] },
+              { id: 'entryType', label: 'Entry Type', type: 'select', options: ['ANSI Flange', 'TriClamp', 'Open Face', 'Bung'] }
+            ]
+          },
+          {
+            title: 'Motor',
+            fields: [
+              { id: 'powerSource', label: 'Power Source', type: 'radio', options: ['Electric', 'Pneumatic'] },
+              { id: 'voltage', label: 'Voltage', type: 'select', options: ['110V/220V', '230V/460V', '575V'] },
+              { id: 'phase', label: 'Phase', type: 'select', options: ['1ph', '3ph'] },
+              { id: 'frequency', label: 'Frequency', type: 'select', options: ['60', '50'] },
+              { id: 'enclosure', label: 'Enclosure', type: 'select', options: ['TEFC', 'TENV', 'Explosion Proof'] },
+              { id: 'vfd', label: 'VFD Required?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'sealType', label: 'Seal Type', type: 'select', options: ['Stuffing Box', 'Mechanical Seal', 'Lip Seal'] },
+              { id: 'wettedMaterial', label: 'Wetted Parts Material', type: 'select', options: ['304SS', '316SS', 'Carbon Steel', 'Hastelloy C-276', 'Alloy 20', 'Other'] }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'filter-press',
+        label: 'Filter Press',
+        sections: [
+          {
+            title: 'Application',
+            fields: [
+              { id: 'companySector', label: 'Company Sector', type: 'select', options: ['Chemical', 'Pharmaceutical', 'Mining', 'Metal Refining', 'Other'] },
+              { id: 'area', label: 'Area', type: 'select', options: ['Process', 'Wastewater Treatment', 'Other'] },
+              { id: 'cityLocation', label: 'City/Location', type: 'text' },
+              { id: 'altitude', label: 'Altitude', type: 'number' },
+              { id: 'installation', label: 'Installation', type: 'select', options: ['Closed Building', 'Outdoor with Roof', 'Outdoor'] },
+              { id: 'productInterest', label: 'Product of Interest', type: 'select', options: ['Solid Phase (Cake)', 'Liquid Phase (Filtrate)', 'Both'] }
+            ]
+          },
+          {
+            title: 'Fluid Characteristics',
+            fields: [
+              { id: 'productDesc', label: 'Product Description', type: 'textarea', required: true },
+              { id: 'pH', label: 'pH', type: 'number' },
+              { id: 'filtrationTemp', label: 'Filtration Temperature', type: 'number', unit: '°F' },
+              { id: 'suspendedSolids', label: 'Suspended Solids Concentration', type: 'number', unit: 'g/L' },
+              { id: 'dissolvedSolids', label: 'Dissolved Solids Concentration', type: 'number', unit: 'g/L' },
+              { id: 'density', label: 'Density of Suspension', type: 'number', unit: 'g/mL' },
+              { id: 'viscosity', label: 'Viscosity', type: 'number', unit: 'cP' },
+              { id: 'particleD50', label: 'Particle Size D50', type: 'number', unit: 'microns' },
+              { id: 'particleD80', label: 'Particle Size D80', type: 'number', unit: 'microns' },
+              { id: 'liquidPhaseComp', label: 'Liquid Phase Composition', type: 'text' },
+              { id: 'solidPhaseComp', label: 'Solid Phase Composition', type: 'text' }
+            ]
+          },
+          {
+            title: 'Flow Requirements',
+            fields: [
+              { id: 'slurryFlowRate', label: 'Slurry Flow Rate', type: 'number', unit: 'm³/hr', required: true },
+              { id: 'operatingHours', label: 'Hours of Operation per Day', type: 'number' },
+              { id: 'cakeProduction', label: 'Cake Production Rate', type: 'number', unit: 't/hr' },
+              { id: 'cakeMoisture', label: 'Required Cake Moisture Max', type: 'number', unit: '%' },
+              { id: 'filtrateTurbidity', label: 'Required Filtrate Turbidity Max', type: 'number', unit: 'ppm' }
+            ]
+          },
+          {
+            title: 'Equipment Requirements',
+            fields: [
+              { id: 'automationLevel', label: 'Automation Level', type: 'select', options: ['Manual Plate Shifting', 'Supervised by Operator', 'Fully Automatic'] },
+              { id: 'standbyUnit', label: 'Stand-by Unit Needed?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'atex', label: 'ATEX/Hazardous Area?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'atexClass', label: 'ATEX Class', type: 'text' },
+              { id: 'voltage', label: 'Voltage', type: 'text', unit: 'V' },
+              { id: 'phase', label: 'Phase', type: 'select', options: ['1ph', '3ph'] },
+              { id: 'frequency', label: 'Frequency', type: 'select', options: ['60', '50'] },
+              { id: 'contactMaterials', label: 'Contact Materials', type: 'checkboxes', options: ['Carbon Steel', 'Stainless Steel', 'Polypropylene', 'PVC', 'Other'] }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'filtration-strainer',
+        label: 'Filtration / Strainer',
+        sections: [
+          {
+            title: 'Fluid Information',
+            fields: [
+              { id: 'fluidFiltered', label: 'Fluid to be Filtered/Strained', type: 'text', required: true },
+              { id: 'specificGravity', label: 'Specific Gravity', type: 'number' },
+              { id: 'viscosity', label: 'Viscosity', type: 'number', unit: 'cP/SSU' },
+              { id: 'temperature', label: 'Temperature', type: 'number', unit: '°F' },
+              { id: 'protecting', label: 'What is the Filter/Strainer Protecting?', type: 'text' }
+            ]
+          },
+          {
+            title: 'Flow Conditions',
+            fields: [
+              { id: 'maxFlow', label: 'Max Flow', type: 'number', unit: 'GPM', required: true },
+              { id: 'minFlow', label: 'Min Flow', type: 'number', unit: 'GPM' },
+              { id: 'operatingPressureNormal', label: 'Operating Pressure Normal', type: 'number', unit: 'PSI' },
+              { id: 'operatingPressureMax', label: 'Operating Pressure Max', type: 'number', unit: 'PSI' },
+              { id: 'operatingTempNormal', label: 'Operating Temp Normal', type: 'number', unit: '°F' },
+              { id: 'operatingTempMax', label: 'Operating Temp Max', type: 'number', unit: '°F' },
+              { id: 'maxPressureDropClean', label: 'Max Allowable Pressure Drop Clean', type: 'number', unit: 'PSI' },
+              { id: 'canInterrupt', label: 'Flow Can Be Interrupted to Clean?', type: 'radio', options: ['Yes', 'No'] }
+            ]
+          },
+          {
+            title: 'Contaminant',
+            fields: [
+              { id: 'solidsType', label: 'Solids Type', type: 'checkboxes', options: ['Hard', 'Soft', 'Sticky', 'Fibrous'] },
+              { id: 'solidsConcPPM', label: 'Solids Concentration (PPM)', type: 'number' },
+              { id: 'solidsConcPercent', label: 'Solids Concentration (% by weight)', type: 'number' },
+              { id: 'particleSize', label: 'Particle Size', type: 'number', unit: 'microns' },
+              { id: 'elementType', label: 'Element Type', type: 'select', options: ['Mesh', 'Perforation', 'Wedge Wire'] }
+            ]
+          },
+          {
+            title: 'Housing',
+            fields: [
+              { id: 'preferredMetallurgy', label: 'Preferred Metallurgy', type: 'text' },
+              { id: 'pipeSize', label: 'Pipe Size', type: 'text', unit: 'in.' },
+              { id: 'endConnections', label: 'End Connections', type: 'select', options: ['Threaded', 'Socket Weld', 'Butt Weld', 'Flanged'] },
+              { id: 'ansiRating', label: 'ANSI Rating', type: 'select', options: ['150 lb', '300 lb', '600 lb'] },
+              { id: 'orngMaterial', label: 'O-Ring Material', type: 'select', options: ['Viton', 'Buna-N', 'Other'] },
+              { id: 'selfCleaning', label: 'Self-Cleaning?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'duplex', label: 'Duplex (Parallel)?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'codeStamped', label: 'Code Stamped?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'pressureGauge', label: 'Differential Pressure Gauge?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'drainValve', label: 'Drain Valve?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'selfCleaningPower', label: 'Power (if self-cleaning): Voltage/Phase/Hz', type: 'text' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'pulsation-dampener',
+        label: 'Pulsation Dampener',
+        sections: [
+          {
+            title: 'Pump Information',
+            fields: [
+              { id: 'pumpModel', label: 'Pump Model', type: 'text' },
+              { id: 'pumpType', label: 'Pump Type', type: 'select', options: ['Simplex', 'Duplex', 'Triplex', 'Quadraplex', 'Quintuplex'] },
+              { id: 'pumpAction', label: 'Pump Action', type: 'select', options: ['Single', 'Double'] },
+              { id: 'volumeStroke', label: 'Volume per Stroke', type: 'number', unit: 'in³' },
+              { id: 'gpm', label: 'GPM', type: 'number' },
+              { id: 'strokesPerMin', label: 'Strokes per Minute', type: 'number' },
+              { id: 'boreDiameter', label: 'Bore Diameter', type: 'number', unit: 'in.' },
+              { id: 'strokeLength', label: 'Stroke Length', type: 'number', unit: 'in.' }
+            ]
+          },
+          {
+            title: 'Fluid & System',
+            fields: [
+              { id: 'liquidPumped', label: 'Liquid Pumped', type: 'text', required: true },
+              { id: 'specificGravity', label: 'Specific Gravity', type: 'number' },
+              { id: 'temperature', label: 'Temperature', type: 'number', unit: '°F' },
+              { id: 'viscosity', label: 'Viscosity', type: 'number', unit: 'cP/SSU' },
+              { id: 'operatingPressure', label: 'System Operating Pressure', type: 'number', unit: 'PSI', required: true },
+              { id: 'quickClosingValve', label: 'Quick Closing Valve on Discharge?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'dischargePipeID', label: 'Discharge Pipe I.D.', type: 'number', unit: 'in.' },
+              { id: 'dampeningPercent', label: '% Dampening Required', type: 'select', options: ['80%', '85%', '90%', '95%', '98%'] }
+            ]
+          },
+          {
+            title: 'Suction Stabilization',
+            fields: [
+              { id: 'suctionStabilizer', label: 'Suction Stabilizer Needed?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'suctionLiftHead', label: 'Suction Lift or Head', type: 'text' },
+              { id: 'suctionPipeID', label: 'Suction Pipe I.D.', type: 'number', unit: 'in.' }
+            ]
+          },
+          {
+            title: 'Construction',
+            fields: [
+              { id: 'inletPort', label: 'Inlet Port', type: 'select', options: ['NPT', 'BSP', 'ANSI', 'DIN', 'Other'] },
+              { id: 'airControl', label: 'Air Control Type', type: 'select', options: ['Adjustable', 'Automatic', 'Chargeable'] },
+              { id: 'bladderMaterial', label: 'Bladder Material', type: 'select', options: ['Aflas', 'Buna-N', 'EPDM', 'Hypalon', 'Neoprene', 'PTFE', 'Viton', 'Other'] },
+              { id: 'wettedMaterial', label: 'Wetted Material', type: 'select', options: ['Alloy 20', 'Aluminum', 'Carbon Steel', 'Hastelloy C', 'PP', 'PVC', 'PVDF', 'Stainless Steel'] }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'expansion-joint',
+        label: 'Expansion Joint',
+        sections: [
+          {
+            title: 'Basic Information',
+            fields: [
+              { id: 'quantity', label: 'Quantity', type: 'number' },
+              { id: 'pipeSize', label: 'Pipe Size', type: 'text', unit: 'in.' },
+              { id: 'assemblyLength', label: 'Overall Assembly Length', type: 'number', unit: 'in.' },
+              { id: 'style', label: 'Style', type: 'select', options: ['Single', 'Universal', 'Externally Pressurized', 'Other'] }
+            ]
+          },
+          {
+            title: 'Connections',
+            fields: [
+              { id: 'inletFittingType', label: 'Inlet Fitting Type', type: 'select', options: ['Flanged', 'Sch 80', 'Sch 40', 'Sch 10', 'Weld End', 'Victaulic'] },
+              { id: 'inletFlange', label: 'Inlet Flange Rating', type: 'select', options: ['150 lb', '300 lb', '600 lb'] },
+              { id: 'outletFittingType', label: 'Outlet Fitting Type', type: 'select', options: ['Flanged', 'Sch 80', 'Sch 40', 'Sch 10', 'Weld End', 'Victaulic'] },
+              { id: 'outletFlange', label: 'Outlet Flange Rating', type: 'select', options: ['150 lb', '300 lb', '600 lb'] }
+            ]
+          },
+          {
+            title: 'Operating Conditions',
+            fields: [
+              { id: 'designPressure', label: 'Design Pressure', type: 'number', unit: 'PSI' },
+              { id: 'operatingPressure', label: 'Operating Pressure', type: 'number', unit: 'PSI' },
+              { id: 'testPressure', label: 'Test Pressure', type: 'number', unit: 'PSI' },
+              { id: 'designTemp', label: 'Design Temperature', type: 'number', unit: '°F' },
+              { id: 'operatingTemp', label: 'Operating Temperature', type: 'number', unit: '°F' },
+              { id: 'flowMedia', label: 'Flow Media', type: 'text' },
+              { id: 'flowVelocity', label: 'Flow Velocity', type: 'number', unit: 'ft/s' }
+            ]
+          },
+          {
+            title: 'Movement Requirements',
+            fields: [
+              { id: 'axialExtension', label: 'Axial Extension', type: 'number', unit: 'in.' },
+              { id: 'axialCompression', label: 'Axial Compression', type: 'number', unit: 'in.' },
+              { id: 'lateralOffset', label: 'Lateral Offset', type: 'number', unit: 'in.' },
+              { id: 'angularMovement', label: 'Angular Movement', type: 'number', unit: 'degrees' },
+              { id: 'requiredCycles', label: 'Required Cycles', type: 'number' }
+            ]
+          },
+          {
+            title: 'Materials',
+            fields: [
+              { id: 'bellowsMaterial', label: 'Bellows Material', type: 'text' },
+              { id: 'endFittingsMaterial', label: 'End Fittings Material', type: 'text' },
+              { id: 'linerMaterial', label: 'Liner Material', type: 'text' },
+              { id: 'tieRods', label: 'Tie Rods', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'flowLiner', label: 'Flow Liner', type: 'radio', options: ['Yes', 'No'] }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'pe-tank',
+        label: 'Tank — Polyethylene',
+        sections: [
+          {
+            title: 'Chemical Service',
+            fields: [
+              { id: 'chemicalName', label: 'Chemical Name', type: 'text', required: true },
+              { id: 'weightPerGallon', label: 'Weight per Gallon', type: 'number', unit: 'lb/gal' },
+              { id: 'pH', label: 'pH', type: 'number' },
+              { id: 'serviceTemp', label: 'Service Temperature', type: 'number', unit: '°F' },
+              { id: 'serviceType', label: 'Service Type', type: 'select', options: ['Bulk Storage', 'Day Tank', 'Mixing Vessel', 'Neutralizing Tank', 'Scrubber'] }
+            ]
+          },
+          {
+            title: 'Tank Specifications',
+            fields: [
+              { id: 'capacity', label: 'Capacity', type: 'number', unit: 'gallons', required: true },
+              { id: 'orientation', label: 'Orientation', type: 'radio', options: ['Vertical', 'Horizontal'] },
+              { id: 'cover', label: 'Cover', type: 'select', options: ['Standard', 'Bolted'] },
+              { id: 'doubleWall', label: 'Double Wall?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'heater', label: 'Heater Required?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'insulation', label: 'Insulation?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'agitator', label: 'Agitator/Mixer Support?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'containment', label: 'Containment Basin?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'sightGauge', label: 'Sight Gauge?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'ladder', label: 'Ladder?', type: 'radio', options: ['Yes', 'No'] }
+            ]
+          },
+          {
+            title: 'Dimensions',
+            fields: [
+              { id: 'diameter', label: 'Diameter', type: 'number', unit: 'in.' },
+              { id: 'straightHeight', label: 'Straight Side Height', type: 'number', unit: 'in.' },
+              { id: 'maxWorkingLevel', label: 'Max Working Level', type: 'number', unit: 'in.' },
+              { id: 'minWorkingLevel', label: 'Min Working Level', type: 'number', unit: 'in.' },
+              { id: 'overallHeight', label: 'Overall Height', type: 'number', unit: 'in.' },
+              { id: 'footprintRestriction', label: 'Footprint Restriction', type: 'text' },
+              { id: 'heightRestriction', label: 'Height Restriction', type: 'text' }
+            ]
+          },
+          {
+            title: 'Site Conditions',
+            fields: [
+              { id: 'location', label: 'Location (City, State)', type: 'text', required: true },
+              { id: 'indoorOutdoor', label: 'Indoor/Outdoor', type: 'radio', options: ['Indoor', 'Outdoor'] },
+              { id: 'lowestTemp', label: 'Lowest Outside Temp', type: 'number', unit: '°F' },
+              { id: 'maintenanceTemp', label: 'Maintenance Temp', type: 'number', unit: '°F' }
+            ]
+          },
+          {
+            title: 'Nozzle Requirements',
+            fields: [
+              { id: 'connectionType', label: 'Connection Type', type: 'radio', options: ['Threaded', 'Flanged'] },
+              { id: 'nozzleList', label: 'Nozzle List (size + location)', type: 'textarea' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'asme-tank',
+        label: 'Tank — ASME / Pressure Vessel',
+        sections: [
+          {
+            title: 'Service Information',
+            fields: [
+              { id: 'serviceDescription', label: 'Service Description', type: 'text', required: true },
+              { id: 'fluidContents', label: 'Fluid / Contents', type: 'text', required: true },
+              { id: 'fluidSG', label: 'Fluid Specific Gravity', type: 'number' },
+              { id: 'fluidTemp', label: 'Operating Temperature', type: 'number', unit: '°F' },
+              { id: 'hazardous', label: 'Hazardous/Flammable Contents?', type: 'radio', options: ['Yes', 'No'] }
+            ]
+          },
+          {
+            title: 'Design Conditions',
+            fields: [
+              { id: 'designPressure', label: 'Design Pressure', type: 'number', unit: 'psig', required: true },
+              { id: 'designTemp', label: 'Design Temperature', type: 'number', unit: '°F', required: true },
+              { id: 'fullVacuum', label: 'Full Vacuum Design?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'mdmt', label: 'MDMT (Min Design Metal Temp)', type: 'number', unit: '°F' },
+              { id: 'hydroTest', label: 'Hydrostatic Test Required?', type: 'radio', options: ['Yes', 'No'] }
+            ]
+          },
+          {
+            title: 'Vessel Geometry',
+            fields: [
+              { id: 'orientation', label: 'Orientation', type: 'radio', options: ['Vertical', 'Horizontal'] },
+              { id: 'volume', label: 'Volume', type: 'number', unit: 'gallons', required: true },
+              { id: 'diameter', label: 'Shell Diameter (ID)', type: 'text', unit: 'in.' },
+              { id: 'tangentLength', label: 'Tangent-to-Tangent Length', type: 'text', unit: 'in.' },
+              { id: 'headType', label: 'Head Type', type: 'select', options: ['2:1 Ellipsoidal', 'ASME Flanged & Dished', 'Hemispherical', 'Flat', 'Conical'] },
+              { id: 'legSupport', label: 'Support Type', type: 'select', options: ['Legs', 'Saddles', 'Skirt', 'Lugs', 'Ring'] }
+            ]
+          },
+          {
+            title: 'Construction',
+            fields: [
+              { id: 'shellMaterial', label: 'Shell Material', type: 'select', options: ['Carbon Steel (A516-70)', 'Stainless Steel 304', 'Stainless Steel 316', 'Duplex 2205', 'Hastelloy C-276', 'Alloy 20', 'Other'] },
+              { id: 'headMaterial', label: 'Head Material', type: 'text' },
+              { id: 'corrosionAllowance', label: 'Corrosion Allowance', type: 'number', unit: 'in.' },
+              { id: 'insulation', label: 'Insulation Required?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'internalCoating', label: 'Internal Coating/Lining?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'coatingDetail', label: 'Coating / Lining Detail', type: 'text' },
+              { id: 'heatingCoil', label: 'Internal Heating/Cooling Coil?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'jacketType', label: 'Jacket Type', type: 'select', options: ['None', 'Full Jacket', 'Half-Pipe Jacket', 'Dimple Jacket'] }
+            ]
+          },
+          {
+            title: 'Code & Certification',
+            fields: [
+              { id: 'asmeCode', label: 'ASME Code', type: 'select', options: ['Section VIII Div 1', 'Section VIII Div 2', 'API 650', 'API 620', 'Non-Code'] },
+              { id: 'asmeStamp', label: 'ASME Stamp Required?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'nbbRegistration', label: 'National Board Registration?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'u1aRequired', label: 'U-1A Form Required?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'pmi', label: 'PMI (Positive Material ID) Required?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'xrayRequirement', label: 'Radiography / NDE Requirement', type: 'select', options: ['None', 'Spot RT', 'Full RT', 'UT', 'Per Code'] }
+            ]
+          },
+          {
+            title: 'Nozzles & Connections',
+            fields: [
+              { id: 'nozzleList', label: 'Nozzle List (size, rating, service)', type: 'textarea' },
+              { id: 'manway', label: 'Manway Required?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'manwaySize', label: 'Manway Size', type: 'text', unit: 'in.' },
+              { id: 'flangeRating', label: 'Flange Rating', type: 'select', options: ['150 lb', '300 lb', '600 lb', '900 lb', '1500 lb'] },
+              { id: 'connectionType', label: 'Connection Type', type: 'select', options: ['Flanged', 'Threaded', 'Socket Weld', 'Butt Weld'] }
+            ]
+          },
+          {
+            title: 'Site Conditions',
+            fields: [
+              { id: 'siteLocation', label: 'Site Location (City, State)', type: 'text' },
+              { id: 'indoorOutdoor', label: 'Installation', type: 'radio', options: ['Indoor', 'Outdoor'] },
+              { id: 'windCode', label: 'Wind / Seismic Code', type: 'text' },
+              { id: 'elevationFt', label: 'Elevation', type: 'number', unit: 'ft ASL' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'pneumatic-conveying',
+        label: 'Solids — Pneumatic Conveying',
+        sections: [
+          {
+            title: 'System Requirements',
+            fields: [
+              { id: 'systemDesc', label: 'System Description', type: 'textarea', required: true },
+              { id: 'productConveyed', label: 'Product to be Conveyed', type: 'text', required: true },
+              { id: 'conveyRate', label: 'Convey Rate', type: 'number', unit: 'lbs/hr', required: true },
+              { id: 'horizontalDistance', label: 'Horizontal Distance', type: 'number', unit: 'ft' },
+              { id: 'verticalDistance', label: 'Vertical Distance', type: 'number', unit: 'ft' },
+              { id: 'num90Elbows', label: 'Number of 90° Elbows', type: 'number' },
+              { id: 'num45Elbows', label: 'Number of 45° Elbows', type: 'number' },
+              { id: 'productSource', label: 'Product Source', type: 'text' },
+              { id: 'conveyGas', label: 'Convey Gas', type: 'radio', options: ['Air', 'Other'] },
+              { id: 'conveyGasOther', label: 'Convey Gas (if other)', type: 'text' },
+              { id: 'altitude', label: 'Altitude', type: 'number', unit: 'ft ASL' }
+            ]
+          },
+          {
+            title: 'Product Characteristics',
+            fields: [
+              { id: 'bulkDensity', label: 'Bulk Density', type: 'number', unit: 'lbs/ft³', required: true },
+              { id: 'heatSensitive', label: 'Heat Sensitive?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'maxConveyGasTemp', label: 'Max Convey Gas Temp', type: 'number', unit: '°F' },
+              { id: 'coolingWater', label: 'Cooling Water Available?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'coolingWaterTemp', label: 'Cooling Water Temp', type: 'number', unit: '°F' },
+              { id: 'coolingWaterGPM', label: 'Cooling Water GPM', type: 'number' },
+              { id: 'abrasive', label: 'Abrasive?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'corrosive', label: 'Corrosive?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'hygroscopic', label: 'Hygroscopic?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'toxic', label: 'Toxic?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'explosive', label: 'Explosive/Flammable?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'particleSize', label: 'Particle Size Distribution', type: 'text' },
+              { id: 'freeFlowing', label: 'Free Flowing?', type: 'radio', options: ['Yes', 'No'] }
+            ]
+          },
+          {
+            title: 'Equipment Requirements',
+            fields: [
+              { id: 'productContactMaterial', label: 'Product Contact Material', type: 'select', options: ['Carbon Steel', 'Carbon Steel Epoxy Coated', '304SS', '316SS', 'Aluminum'] },
+              { id: 'nonProductContactMaterial', label: 'Non-Product Contact Material', type: 'select', options: ['Carbon Steel', 'Carbon Steel Epoxy Coated', '304SS', '316SS', 'Aluminum'] },
+              { id: 'systemType', label: 'System Type', type: 'select', options: ['Dilute Phase Vacuum', 'Dilute Phase Pressure', 'Combination Vacuum-Pressure', 'Dense Phase'] },
+              { id: 'motorEnclosure', label: 'Motor Enclosure', type: 'select', options: ['TEFC', 'Explosion Proof', 'Energy Efficient'] },
+              { id: 'voltage', label: 'Electrical Voltage', type: 'text' },
+              { id: 'controlPanel', label: 'Control Panel Required?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'preferredPLC', label: 'Preferred PLC', type: 'text' },
+              { id: 'startupDate', label: 'Projected Start-Up Date', type: 'date' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'airlock-valve',
+        label: 'Rotary Airlock Valve',
+        sections: [
+          {
+            title: 'Valve Information',
+            fields: [
+              { id: 'valvePurpose', label: 'Valve Purpose', type: 'radio', options: ['Airlock', 'Feeder', 'Feeder + Airlock'], required: true },
+              { id: 'replacement', label: 'Replacement?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'existingManufacturer', label: 'Existing Manufacturer', type: 'text' },
+              { id: 'existingModel', label: 'Existing Model', type: 'text' },
+              { id: 'existingSerial', label: 'Existing Serial #', type: 'text' }
+            ]
+          },
+          {
+            title: 'Process Flow',
+            fields: [
+              { id: 'pressureAbove', label: 'Pressure Above Valve', type: 'number', unit: 'PSI' },
+              { id: 'pressureBelow', label: 'Pressure Below Valve', type: 'number', unit: 'PSI' },
+              { id: 'diffPressure', label: 'Differential Pressure', type: 'number', unit: 'PSI' },
+              { id: 'flowStackDesc', label: 'Flow/Stack Description', type: 'textarea' }
+            ]
+          },
+          {
+            title: 'Material Profile',
+            fields: [
+              { id: 'bulkDensity', label: 'Bulk Density', type: 'number', unit: 'lbs/ft³', required: true },
+              { id: 'particleChar', label: 'Particle Characteristics', type: 'checkboxes', options: ['Powder', 'Fibrous', 'Sticky', 'Pellet', 'Corrosive'] },
+              { id: 'maxParticleSize', label: 'Max Particle Size', type: 'number', unit: 'microns' },
+              { id: 'angleRepose', label: 'Angle of Repose', type: 'number', unit: 'degrees' },
+              { id: 'abrasiveness', label: 'Abrasiveness', type: 'select', options: ['Low', 'Medium', 'High'] }
+            ]
+          },
+          {
+            title: 'Requirements',
+            fields: [
+              { id: 'inletFlange', label: 'Inlet Flange Size', type: 'text' },
+              { id: 'inletFlangeRating', label: 'Inlet Flange Rating', type: 'text' },
+              { id: 'outletFlange', label: 'Outlet Flange Size', type: 'text' },
+              { id: 'outletFlangeRating', label: 'Outlet Flange Rating', type: 'text' },
+              { id: 'dutyCycle', label: 'Duty Cycle', type: 'text' },
+              { id: 'specialRequirements', label: 'Special Requirements / Notes', type: 'textarea' }
+            ]
+          }
+        ]
+      }
+    ];
+
+    // ===== RENDER FUNCTIONS =====
+    function selectEquipmentFromDropdown() {
+      const select = document.getElementById('equipmentSelect');
+      const id = select.value;
+      if (!id) {
+        document.getElementById('formSections').classList.remove('active');
+        return;
+      }
+      const equipment = equipmentTypes.find(e => e.id === id);
+      renderFormSections(equipment.sections);
+      document.getElementById('formSections').classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    function renderFormSections(sections) {
+      const container = document.getElementById('formSections');
+      container.innerHTML = sections.map((section, sectionIdx) => `
+        <div class="form-card">
+          <div class="section-header" onclick="toggleSection(this)">
+            <h4>${section.title}</h4>
+            <span class="section-toggle ${sectionIdx === 0 ? 'open' : ''}">▼</span>
+          </div>
+          <div class="section-content ${sectionIdx === 0 ? 'open' : ''}">
+            <div class="section-grid">
+              ${section.fields.map(field => renderField(field)).join('')}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function renderField(field) {
+      const required = field.required ? 'required' : '';
+      const unitDisplay = field.unit ? ` <span style="font-size: 11px; color: var(--text-secondary);">${field.unit}</span>` : '';
+
+      if (field.type === 'text' || field.type === 'number' || field.type === 'date' || field.type === 'email' || field.type === 'tel') {
+        return `
+          <div class="form-group">
+            <label class="${required}">${field.label}${unitDisplay}</label>
+            <input type="${field.type}" id="${field.id}" placeholder="${field.hint || ''}">
+          </div>
+        `;
+      }
+
+      if (field.type === 'textarea') {
+        return `
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label class="${required}">${field.label}${unitDisplay}</label>
+            <textarea id="${field.id}" placeholder="${field.hint || ''}"></textarea>
+          </div>
+        `;
+      }
+
+      if (field.type === 'select') {
+        return `
+          <div class="form-group">
+            <label class="${required}">${field.label}${unitDisplay}</label>
+            <select id="${field.id}">
+              <option value="">Select...</option>
+              ${field.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+            </select>
+          </div>
+        `;
+      }
+
+      if (field.type === 'radio') {
+        return `
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label class="${required}">${field.label}</label>
+            <div class="radio-group">
+              ${field.options.map(opt => `
+                <div class="radio-option">
+                  <input type="radio" id="${field.id}_${opt}" name="${field.id}" value="${opt}">
+                  <label for="${field.id}_${opt}" class="radio-label">${opt}</label>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      if (field.type === 'checkboxes') {
+        return `
+          <div class="form-group" style="grid-column: 1 / -1;">
+            <label>${field.label}</label>
+            <div class="chip-grid">
+              ${field.options.map(opt => `
+                <div class="chip">
+                  <input type="checkbox" id="${field.id}_${opt}" value="${opt}">
+                  <label for="${field.id}_${opt}" class="chip-label">${opt}</label>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      return '';
+    }
+
+    function toggleSection(header) {
+      const toggle = header.querySelector('.section-toggle');
+      const content = header.nextElementSibling;
+      toggle.classList.toggle('open');
+      content.classList.toggle('open');
+    }
+
+    function copyToClipboard() {
+      const text = generateFormText();
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('Copied to clipboard!');
+      }).catch(() => {
+        showToast('Failed to copy');
+      });
+    }
+
+    function generateFormText() {
+      const headerData = {
+        'Customer Name': document.getElementById('headerCustomerName').value,
+        'Company': document.getElementById('headerCompany').value,
+        'Phone': document.getElementById('headerPhone').value,
+        'Email': document.getElementById('headerEmail').value,
+        'Date': document.getElementById('headerDate').value,
+        'Project / Tag #': document.getElementById('headerProjectTag').value,
+        'Rep': document.getElementById('headerRep').value,
+        'Notes': document.getElementById('headerNotes').value
+      };
+
+      let text = 'VOIGT-ABERNATHY — EQUIPMENT APPLICATION DATA\n';
+      text += '='.repeat(50) + '\n\n';
+
+      const select = document.getElementById('equipmentSelect');
+      if (select.value) {
+        const equipment = equipmentTypes.find(e => e.id === select.value);
+        text += `Equipment Type: ${equipment.label}\n\n`;
+      }
+
+      text += 'CUSTOMER INFORMATION\n';
+      text += '-'.repeat(50) + '\n';
+      Object.entries(headerData).forEach(([key, val]) => {
+        if (val) text += `${key}: ${val}\n`;
+      });
+
+      text += '\nFORM DATA\n';
+      text += '-'.repeat(50) + '\n';
+
+      document.querySelectorAll('.form-card').forEach(card => {
+        const sectionTitle = card.querySelector('.section-header h4').textContent;
+        text += `\n[${sectionTitle}]\n`;
+
+        card.querySelectorAll('.form-group').forEach(group => {
+          const label = group.querySelector('label');
+          if (!label) return;
+          const labelText = label.textContent.replace(' *', '').trim();
+
+          const input = group.querySelector('input, textarea, select');
+          if (!input) return;
+
+          let value = '';
+          if (input.type === 'checkbox' || input.type === 'radio') {
+            const checked = group.querySelectorAll('input:checked');
+            value = Array.from(checked).map(c => c.value).join(', ');
+          } else {
+            value = input.value;
+          }
+
+          if (value) text += `  ${labelText}: ${value}\n`;
+        });
+      });
+
+      return text;
+    }
+
+    function emailToInsideSales() {
+      const text = generateFormText();
+      const company = document.getElementById('headerCompany').value || 'Unknown';
+      const today = new Date().toLocaleDateString();
+
+      const select = document.getElementById('equipmentSelect');
+      let equipmentType = 'Equipment RFQ';
+      if (select.value) {
+        const equipment = equipmentTypes.find(e => e.id === select.value);
+        equipmentType = equipment.label;
+      }
+
+      const subject = `Equipment Application Data – ${equipmentType} – ${company} – ${today}`;
+
+      let body = text;
+      if (body.length > 2000) {
+        body = body.substring(0, 1900) + '\n\n... [Full data copied to clipboard — please paste]';
+        navigator.clipboard.writeText(text);
+      }
+
+      const mailtoLink = `mailto:mssales@voigtab.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = mailtoLink;
+      showToast('Email draft opened in your mail client');
+    }
+
+    function logToCRM() {
+      const company = document.getElementById('headerCompany').value;
+      const customerName = document.getElementById('headerCustomerName').value;
+      const rep = document.getElementById('headerRep').value;
+      const insideSales = document.getElementById('headerInsideSales').value;
+      const projectTag = document.getElementById('headerProjectTag').value;
+      const notes = document.getElementById('headerNotes').value;
+      const date = document.getElementById('headerDate').value;
+
+      const select = document.getElementById('equipmentSelect');
+      let equipmentType = '';
+      if (select.value) {
+        const equipment = equipmentTypes.find(e => e.id === select.value);
+        equipmentType = equipment ? equipment.label : '';
+      }
+
+      if (!company && !customerName) {
+        showToast('Please enter at least a customer name or company before logging.');
+        return;
+      }
+
+      // Build the full form text for the note
+      const formText = generateFormText();
+
+      // Build HubSpot search URL — searches for the company/contact
+      const searchQuery = encodeURIComponent(company || customerName);
+      const noteText = encodeURIComponent(formText);
+
+      // Construct a deep link to HubSpot that opens company search
+      // Falls back to a generic CRM log modal if HubSpot isn't configured
+      const hubspotSearchUrl = `https://app.hubspot.com/contacts/search?q=${searchQuery}`;
+
+      // Show CRM modal with options
+      document.getElementById('crmModalCompany').textContent = company || customerName || '(not set)';
+      document.getElementById('crmModalEquipment').textContent = equipmentType || '(not set)';
+      document.getElementById('crmModalRep').textContent = rep;
+      document.getElementById('crmModalDate').textContent = date;
+      document.getElementById('crmNoteText').value = formText;
+      document.getElementById('crmHubspotLink').href = hubspotSearchUrl;
+      document.getElementById('crmModal').classList.add('active');
+    }
+
+    function copyCRMNote() {
+      const text = document.getElementById('crmNoteText').value;
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('CRM note copied to clipboard — paste into HubSpot activity');
+      });
+    }
+
+    function closeCRMModal() {
+      document.getElementById('crmModal').classList.remove('active');
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3000);
+    }
+
+    function showClearConfirm() {
+      document.getElementById('clearModal').classList.add('active');
+    }
+
+    function closeClearConfirm() {
+      document.getElementById('clearModal').classList.remove('active');
+    }
+
+    function clearForm() {
+      document.querySelectorAll('input, textarea, select').forEach(el => {
+        if (el.id === 'headerRep') return; // keep rep selection
+        if (el.type === 'checkbox' || el.type === 'radio') {
+          el.checked = false;
+        } else if (el.id === 'headerDate') {
+          el.valueAsDate = new Date();
+        } else {
+          el.value = '';
+        }
+      });
+      document.getElementById('equipmentSelect').value = '';
+      document.getElementById('formSections').classList.remove('active');
+      document.getElementById('crmModal').classList.remove('active');
+      closeClearConfirm();
+      showToast('Form cleared');
+    }
+
+    // Init
+    loadTheme();
+  </script>
+</body>
+</html>
