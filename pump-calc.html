@@ -1,0 +1,2479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voigt-Abernathy Pump Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #1a2744;
+            --blue-accent: #2e7de9;
+            --bg-light: #eef0f3;
+            --text-dark: #2c3e50;
+            --text-light: #6b7280;
+            --border: #d1d5db;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        body.dark {
+            --bg-light: #1a1f2e;
+            --text-dark: #e0e6ed;
+            --text-light: #b4bcc8;
+            --border: #2d3748;
+            background-color: #0f1419;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--navy) 0%, #243554 100%);
+            color: white;
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .header-left h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0.5rem 0;
+            letter-spacing: -0.5px;
+        }
+
+        .header-subtitle {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.85;
+            margin-bottom: 0.25rem;
+        }
+
+        header p {
+            font-size: 0.9rem;
+            opacity: 0.75;
+            margin-top: 0.5rem;
+        }
+
+        .header-right {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .back-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .tab-bar {
+            background: white;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            gap: 0;
+            overflow-x: auto;
+            padding: 0 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        body.dark .tab-bar {
+            background: #1a1f2e;
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 1.25rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            color: var(--text-light);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab-button:hover {
+            color: var(--text-dark);
+        }
+
+        .tab-button.active {
+            color: var(--blue-accent);
+            border-bottom-color: var(--blue-accent);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .calc-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .calc-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 6px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--blue-accent);
+        }
+
+        body.dark .card {
+            background: #1a1f2e;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1.5rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 4px;
+            background: var(--blue-accent);
+            border-radius: 50%;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            font-family: 'Inter', sans-serif;
+            background: white;
+            color: var(--text-dark);
+            transition: border-color 0.2s;
+        }
+
+        body.dark input[type="text"],
+        body.dark input[type="number"],
+        body.dark select,
+        body.dark textarea {
+            background: #0f1419;
+            color: var(--text-dark);
+            border-color: #2d3748;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--blue-accent);
+            box-shadow: 0 0 0 3px rgba(46, 125, 233, 0.1);
+        }
+
+        .input-with-unit {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .input-with-unit input {
+            flex: 1;
+        }
+
+        .unit {
+            display: flex;
+            align-items: center;
+            padding: 0 0.75rem;
+            background: var(--bg-light);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-light);
+            white-space: nowrap;
+        }
+
+        body.dark .unit {
+            background: #0f1419;
+            border-color: #2d3748;
+        }
+
+        .radio-group,
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .radio-item,
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+        .results-panel {
+            background: var(--navy);
+            color: white;
+            border-radius: 6px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        body.dark .results-panel {
+            background: #0f1419;
+            border: 2px solid var(--blue-accent);
+        }
+
+        .result-item {
+            margin-bottom: 2rem;
+        }
+
+        .result-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .result-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.75;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-value {
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+        }
+
+        .result-unit {
+            font-size: 0.85rem;
+            opacity: 0.75;
+            margin-top: 0.25rem;
+        }
+
+        .result-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.85;
+            margin-top: 0.5rem;
+        }
+
+        .warning {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid var(--warning);
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        .error {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 4px solid var(--danger);
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        .success {
+            background: rgba(16, 185, 129, 0.1);
+            border-left: 4px solid var(--success);
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        .color-dot {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .color-dot.green { background: var(--success); }
+        .color-dot.yellow { background: var(--warning); }
+        .color-dot.red { background: var(--danger); }
+
+        .formula-ref {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 2px solid var(--blue-accent);
+            border-radius: 4px;
+        }
+
+        .formula-ref-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.6;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .formula-ref-content {
+            display: none;
+            font-size: 0.8rem;
+            font-family: 'Courier New', monospace;
+            line-height: 1.8;
+            opacity: 0.85;
+            color: #e0e6ed;
+        }
+
+        .formula-ref-content.open {
+            display: block;
+        }
+
+        .formula-ref-content code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.2rem 0.4rem;
+            border-radius: 2px;
+            display: block;
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        button {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            border: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary {
+            background: var(--bg-light);
+            color: var(--text-dark);
+            border: 1px solid var(--border);
+        }
+
+        body.dark .btn-secondary {
+            background: #0f1419;
+            border-color: #2d3748;
+        }
+
+        .btn-secondary:hover {
+            background: var(--blue-accent);
+            color: white;
+            border-color: var(--blue-accent);
+        }
+
+        .btn-link {
+            background: none;
+            color: var(--blue-accent);
+            border: none;
+            padding: 0;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .section-divider {
+            border-top: 2px solid var(--border);
+            margin: 2rem 0;
+            padding-top: 2rem;
+        }
+
+        .minor-losses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .fitting-box {
+            border: 1px solid var(--border);
+            padding: 1rem;
+            border-radius: 4px;
+            background: var(--bg-light);
+        }
+
+        body.dark .fitting-box {
+            background: #0f1419;
+        }
+
+        .fitting-box label {
+            margin-bottom: 0.75rem;
+            font-size: 0.8rem;
+        }
+
+        .fitting-box .fitting-k {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+        }
+
+        .hint {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+            font-weight: 400;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 1.5rem 0 1rem 0;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border);
+            color: var(--text-dark);
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .datalist-input {
+            position: relative;
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        .slider-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        input[type="range"] {
+            flex: 1;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--border);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--blue-accent);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 0 6px rgba(46, 125, 233, 0.2);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--blue-accent);
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        input[type="range"]::-moz-range-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 0 6px rgba(46, 125, 233, 0.2);
+        }
+
+        .slider-value {
+            min-width: 60px;
+            text-align: right;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .breakdown-table {
+            width: 100%;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+        }
+
+        .breakdown-table th,
+        .breakdown-table td {
+            padding: 0.5rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .breakdown-table th {
+            font-weight: 700;
+            opacity: 0.75;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.5px;
+        }
+
+        .breakdown-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .header-left h1 {
+                font-size: 1.5rem;
+            }
+
+            header p {
+                font-size: 0.8rem;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .tab-bar {
+                padding: 0 1rem;
+            }
+
+            .tab-button {
+                padding: 1rem 1rem;
+                font-size: 0.8rem;
+            }
+
+            .tab-content {
+                padding: 1.5rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .results-panel {
+                padding: 1.5rem;
+            }
+
+            .calc-container {
+                gap: 1rem;
+            }
+
+            .result-value {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <div class="header-subtitle">Engineering Calculators</div>
+            <h1>Voigt-Abernathy Pump Tools</h1>
+            <p>Friction Loss · NPSHa · Affinity Laws · BHP · Unit Conversions</p>
+        </div>
+        <div class="header-right">
+            <a href="rfq-app.html" class="back-link">← RFQ Form</a>
+            <button class="theme-toggle" onclick="toggleTheme()">LIGHT / DARK</button>
+        </div>
+    </header>
+
+    <div class="tab-bar">
+        <button class="tab-button active" onclick="switchTab(0)">1. Fluid Properties</button>
+        <button class="tab-button" onclick="switchTab(1)">2. Pipe Velocity</button>
+        <button class="tab-button" onclick="switchTab(2)">3. Friction Loss</button>
+        <button class="tab-button" onclick="switchTab(3)">4. Head ↔ Pressure</button>
+        <button class="tab-button" onclick="switchTab(4)">5. NPSHa (Centrifugal)</button>
+        <button class="tab-button" onclick="switchTab(5)">6. NPSHa (PD)</button>
+        <button class="tab-button" onclick="switchTab(6)">7. Affinity Laws</button>
+        <button class="tab-button" onclick="switchTab(7)">8. BHP & Motor</button>
+    </div>
+
+    <!-- TAB 0: Fluid Properties -->
+    <div class="tab-content active">
+        <div class="calc-container">
+            <div class="card">
+                <div class="card-title">Fluid Selection & Properties</div>
+
+                <div class="form-group">
+                    <label>Fluid Name</label>
+                    <input type="text" id="fluidName" list="fluidList" placeholder="Select or enter fluid..."
+                           oninput="updateFluidProperties()">
+                    <datalist id="fluidList">
+                        <option value="Water (68°F)"></option>
+                        <option value="Water (100°F)"></option>
+                        <option value="Water (140°F)"></option>
+                        <option value="Water (212°F)"></option>
+                        <option value="Ethylene Glycol 50%"></option>
+                        <option value="Mineral Oil ISO 32"></option>
+                        <option value="Mineral Oil ISO 46"></option>
+                        <option value="Mineral Oil ISO 68"></option>
+                        <option value="Sulfuric Acid 93%"></option>
+                        <option value="Sodium Hydroxide 50%"></option>
+                        <option value="Hydrochloric Acid 35%"></option>
+                    </datalist>
+                </div>
+
+                <div class="form-group">
+                    <label>Temperature (°F)</label>
+                    <input type="number" id="fluidTemp" placeholder="68" oninput="updateFluidProperties()">
+                </div>
+
+                <div class="form-group">
+                    <label>Specific Gravity (SG)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="fluidSG" step="0.01" placeholder="1.00" oninput="updateFluidProperties()">
+                        <div class="unit">—</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Density</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="fluidDensity" readonly placeholder="62.4">
+                        <div class="unit">lb/ft³</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Dynamic Viscosity</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="fluidViscosityCp" step="0.1" placeholder="1.0" oninput="updateFluidProperties()">
+                        <div class="unit">cP</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Kinematic Viscosity</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="fluidViscosityCst" readonly placeholder="1.0">
+                        <div class="unit">cSt</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Vapor Pressure (psia)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="fluidVaporPressure" step="0.01" placeholder="0.34" oninput="updateFluidProperties()">
+                        <div class="unit">psia</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-panel">
+                <div class="card-title" style="color: white;">Fluid Classification</div>
+
+                <div class="result-item">
+                    <div class="result-label">Density</div>
+                    <div class="result-value" id="resultDensity">—</div>
+                    <div class="result-unit">lb/ft³</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Kinematic Viscosity</div>
+                    <div class="result-value" id="resultKinVis">—</div>
+                    <div class="result-unit">cSt</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Classification</div>
+                    <div class="result-value" id="resultFluidClass">—</div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div id="fluidWarnings"></div>
+
+                <div class="formula-ref">
+                    <div class="formula-ref-title" onclick="toggleFormula(this)">View Formulas ➜</div>
+                    <div class="formula-ref-content">
+                        <code>Density = SG × 62.4 lb/ft³</code>
+                        <code>Kinematic Viscosity = Dynamic Viscosity / SG (cSt = cP / SG)</code>
+                        <code>Light: &lt; 10 cSt | Medium: 10-50 cSt | Heavy: 50-200 cSt | Very Heavy: &gt; 200 cSt</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 1: Pipe Velocity & Reynolds Number -->
+    <div class="tab-content">
+        <div class="calc-container">
+            <div class="card">
+                <div class="card-title">Pipe & Flow Inputs</div>
+
+                <div class="form-group">
+                    <label>Flow Rate (GPM)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="v1FlowRate" step="0.1" placeholder="0" oninput="calcVelocity()">
+                        <div class="unit">GPM</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Pipe Size (Nominal)</label>
+                    <select id="v1PipeSize" oninput="calcVelocity()">
+                        <option value="">— Select —</option>
+                        <option value="0.5">0.5"</option>
+                        <option value="0.75">0.75"</option>
+                        <option value="1">1"</option>
+                        <option value="1.25">1.25"</option>
+                        <option value="1.5">1.5"</option>
+                        <option value="2">2"</option>
+                        <option value="2.5">2.5"</option>
+                        <option value="3">3"</option>
+                        <option value="4">4"</option>
+                        <option value="6">6"</option>
+                        <option value="8">8"</option>
+                        <option value="10">10"</option>
+                        <option value="12">12"</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Schedule</label>
+                    <select id="v1Schedule" oninput="calcVelocity()">
+                        <option value="">— Select —</option>
+                        <option value="40">Sch 40</option>
+                        <option value="80">Sch 80</option>
+                        <option value="160">Sch 160</option>
+                        <option value="custom">Custom ID</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="customIdGroup" style="display:none;">
+                    <label>Custom ID (inches)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="v1CustomId" step="0.01" placeholder="0" oninput="calcVelocity()">
+                        <div class="unit">in</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Kinematic Viscosity (cSt)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="v1Viscosity" step="0.1" placeholder="1.0" oninput="calcVelocity()">
+                        <div class="unit">cSt</div>
+                    </div>
+                    <div class="hint">Leave blank to auto-fill from Fluid Properties tab</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Application Type</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="v1Suction" name="v1AppType" value="suction" checked oninput="calcVelocity()">
+                            <label for="v1Suction" style="margin:0;">Suction Line</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="v1Discharge" name="v1AppType" value="discharge" oninput="calcVelocity()">
+                            <label for="v1Discharge" style="margin:0;">Discharge Line</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-panel">
+                <div class="card-title" style="color: white;">Velocity & Reynolds</div>
+
+                <div class="result-item">
+                    <div class="result-label">Pipe ID</div>
+                    <div class="result-value" id="resultPipeID">—</div>
+                    <div class="result-unit">inches</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Flow Velocity</div>
+                    <div class="result-value" id="resultVelocity">—</div>
+                    <div class="result-unit">ft/s</div>
+                    <div class="result-subtitle" id="velocityStatus"></div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Reynolds Number</div>
+                    <div class="result-value" id="resultRe">—</div>
+                    <div class="result-subtitle" id="reRegime"></div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div id="velocityWarnings"></div>
+
+                <div class="formula-ref">
+                    <div class="formula-ref-title" onclick="toggleFormula(this)">View Formulas ➜</div>
+                    <div class="formula-ref-content">
+                        <code>V = (GPM × 0.002228) / (π × (ID/2)²)</code>
+                        <code>Re = V × D / (ν × 1.076e-5)</code>
+                        <code>Laminar: Re &lt; 2300 | Turbulent: Re &gt; 4000</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 2: Friction Loss -->
+    <div class="tab-content">
+        <div class="calc-container">
+            <div class="card">
+                <div class="card-title">Pipe & System Inputs</div>
+
+                <div class="form-group">
+                    <label>Flow Rate (GPM)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="f1FlowRate" step="0.1" placeholder="0" oninput="calcFrictionLoss()">
+                        <div class="unit">GPM</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Pipe ID (inches)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="f1PipeID" step="0.01" placeholder="0" oninput="calcFrictionLoss()">
+                        <div class="unit">in</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Pipe Length (ft)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="f1Length" step="0.1" placeholder="0" oninput="calcFrictionLoss()">
+                        <div class="unit">ft</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Pipe Material</label>
+                    <select id="f1Material" oninput="calcFrictionLoss()">
+                        <option value="">— Select —</option>
+                        <option value="Commercial Steel">Commercial Steel</option>
+                        <option value="Galvanized Steel">Galvanized Steel</option>
+                        <option value="Cast Iron">Cast Iron</option>
+                        <option value="PVC/HDPE">PVC / HDPE</option>
+                        <option value="Stainless Steel">Stainless Steel</option>
+                        <option value="Drawn Tubing">Drawn Tubing</option>
+                        <option value="Concrete">Concrete</option>
+                    </select>
+                </div>
+
+                <div class="two-column">
+                    <div class="form-group">
+                        <label>Kinematic Viscosity (cSt)</label>
+                        <input type="number" id="f1Viscosity" step="0.1" placeholder="1.0" oninput="calcFrictionLoss()">
+                    </div>
+                    <div class="form-group">
+                        <label>Specific Gravity</label>
+                        <input type="number" id="f1SG" step="0.01" placeholder="1.00" oninput="calcFrictionLoss()">
+                    </div>
+                </div>
+
+                <div class="section-title">Minor Losses (Fittings)</div>
+                <div class="minor-losses-grid">
+                    <div class="fitting-box">
+                        <label>90° Elbow LR</label>
+                        <input type="number" id="fitting_90lr" min="0" placeholder="0" oninput="calcFrictionLoss()">
+                        <div class="fitting-k">K = 0.32</div>
+                    </div>
+                    <div class="fitting-box">
+                        <label>90° Elbow Std</label>
+                        <input type="number" id="fitting_90" min="0" placeholder="0" oninput="calcFrictionLoss()">
+                        <div class="fitting-k">K = 0.9</div>
+                    </div>
+                    <div class="fitting-box">
+                        <label>45° Elbow</label>
+                        <input type="number" id="fitting_45" min="0" placeholder="0" oninput="calcFrictionLoss()">
+                        <div class="fitting-k">K = 0.4</div>
+                    </div>
+                    <div class="fitting-box">
+                        <label>Tee Straight</label>
+                        <input type="number" id="fitting_tees" min="0" placeholder="0" oninput="calcFrictionLoss()">
+                        <div class="fitting-k">K = 0.6</div>
+                    </div>
+                    <div class="fitting-box">
+                        <label>Tee Branch</label>
+                        <input type="number" id="fitting_teeb" min="0" placeholder="0" oninput="calcFrictionLoss()">
+                        <div class="fitting-k">K = 1.0</div>
+                    </div>
+                    <div class="fitting-box">
+                        <label>Gate Valve (Full)</label>
+                        <input type="number" id="fitting_gate" min="0" placeholder="0" oninput="calcFrictionLoss()">
+                        <div class="fitting-k">K = 0.2</div>
+                    </div>
+                    <div class="fitting-box">
+                        <label>Ball Valve (Full)</label>
+                        <input type="number" id="fitting_ball" min="0" placeholder="0" oninput="calcFrictionLoss()">
+                        <div class="fitting-k">K = 0.05</div>
+                    </div>
+                    <div class="fitting-box">
+                        <label>Globe Valve (Full)</label>
+                        <input type="number" id="fitting_globe" min="0" placeholder="0" oninput="calcFrictionLoss()">
+                        <div class="fitting-k">K = 10</div>
+                    </div>
+                    <div class="fitting-box">
+                        <label>Check Valve (Swing)</label>
+                        <input type="number" id="fitting_check" min="0" placeholder="0" oninput="calcFrictionLoss()">
+                        <div class="fitting-k">K = 2.0</div>
+                    </div>
+                    <div class="fitting-box">
+                        <label>Check Valve (Ball)</label>
+                        <input type="number" id="fitting_checkb" min="0" placeholder="0" oninput="calcFrictionLoss()">
+                        <div class="fitting-k">K = 1.5</div>
+                    </div>
+                    <div class="fitting-box">
+                        <label>Butterfly Valve</label>
+                        <input type="number" id="fitting_butterfly" min="0" placeholder="0" oninput="calcFrictionLoss()">
+                        <div class="fitting-k">K = 0.3</div>
+                    </div>
+                    <div class="fitting-box">
+                        <label>Sharp Entrance</label>
+                        <input type="number" id="fitting_entrance" min="0" placeholder="0" oninput="calcFrictionLoss()">
+                        <div class="fitting-k">K = 0.5</div>
+                    </div>
+                    <div class="fitting-box">
+                        <label>Exit</label>
+                        <input type="number" id="fitting_exit" min="0" placeholder="0" oninput="calcFrictionLoss()">
+                        <div class="fitting-k">K = 1.0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-panel">
+                <div class="card-title" style="color: white;">Friction Loss Summary</div>
+
+                <div class="result-item">
+                    <div class="result-label">Flow Velocity</div>
+                    <div class="result-value" id="resultF1Velocity">—</div>
+                    <div class="result-unit">ft/s</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Reynolds Number</div>
+                    <div class="result-value" id="resultF1Re">—</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Friction Factor</div>
+                    <div class="result-value" id="resultF1Factor">—</div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="result-item">
+                    <div class="result-label">Major Loss (Pipe)</div>
+                    <div class="result-value" id="resultF1MajorFt">—</div>
+                    <div class="result-unit">ft (<span id="resultF1MajorPsi">—</span> psi)</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Minor Loss (Fittings)</div>
+                    <div class="result-value" id="resultF1MinorFt">—</div>
+                    <div class="result-unit">ft (<span id="resultF1MinorPsi">—</span> psi)</div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="result-item">
+                    <div class="result-label">Total Friction Loss</div>
+                    <div class="result-value" id="resultF1TotalFt">—</div>
+                    <div class="result-unit">ft</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Total Friction Loss</div>
+                    <div class="result-value" id="resultF1TotalPsi">—</div>
+                    <div class="result-unit">psi</div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="result-item">
+                    <div class="result-label">Loss per 100 ft</div>
+                    <div class="result-value" id="resultF1Per100">—</div>
+                    <div class="result-unit">psi/100ft</div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="copyFrictionResults()">Copy Results</button>
+                </div>
+
+                <div class="formula-ref">
+                    <div class="formula-ref-title" onclick="toggleFormula(this)">View Formulas ➜</div>
+                    <div class="formula-ref-content">
+                        <code>Swamee-Jain: f = 0.25 / (log10(e/D/3.7 + 5.74/Re^0.9))²</code>
+                        <code>hf_major = f × (L/D) × (V²/2g)</code>
+                        <code>hf_minor = Σ(K × qty) × (V²/2g)</code>
+                        <code>hf_psi = hf_ft × SG / 2.307</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 3: Head ↔ Pressure Converter -->
+    <div class="tab-content">
+        <div class="card">
+            <div class="card-title">Fluid Property</div>
+            <div class="form-group">
+                <label>Specific Gravity</label>
+                <input type="number" id="c1SG" step="0.01" placeholder="1.00" oninput="calcHeadPressure()">
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 1400px; margin: 0 auto; padding: 2rem;">
+            <!-- Section A: Head to Pressure -->
+            <div class="card">
+                <div class="card-title">Head → Pressure</div>
+
+                <div class="form-group">
+                    <label>Head</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="c1HeadFt" step="0.1" placeholder="0" oninput="calcHeadPressure()">
+                        <div class="unit">ft</div>
+                    </div>
+                </div>
+
+                <div style="background: var(--navy); color: white; padding: 1.5rem; border-radius: 6px;">
+                    <div class="result-label" style="color: rgba(255,255,255,0.75);">Pressure</div>
+                    <div class="result-value" id="c1PressurePsi" style="color: white; font-size: 1.8rem;">—</div>
+                    <div class="result-unit">psi</div>
+
+                    <div style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.85;">
+                        <span id="c1PressureBar">—</span> bar &nbsp; | &nbsp; <span id="c1PressureKpa">—</span> kPa
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section B: Pressure to Head -->
+            <div class="card">
+                <div class="card-title">Pressure → Head</div>
+
+                <div class="form-group">
+                    <label>Pressure</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="c1PressurePsiIn" step="0.1" placeholder="0" oninput="calcHeadPressure()">
+                        <div class="unit">psi</div>
+                    </div>
+                </div>
+
+                <div style="background: var(--navy); color: white; padding: 1.5rem; border-radius: 6px;">
+                    <div class="result-label" style="color: rgba(255,255,255,0.75);">Head</div>
+                    <div class="result-value" id="c1HeadFtOut" style="color: white; font-size: 1.8rem;">—</div>
+                    <div class="result-unit">ft</div>
+
+                    <div style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.85;">
+                        <span id="c1HeadMeter">—</span> m
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 1400px; margin: 2rem auto; padding: 0 2rem;">
+            <!-- Section C: Velocity Head -->
+            <div class="card">
+                <div class="card-title">Velocity → Velocity Head</div>
+
+                <div class="form-group">
+                    <label>Velocity</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="c1VelocityFts" step="0.1" placeholder="0" oninput="calcHeadPressure()">
+                        <div class="unit">ft/s</div>
+                    </div>
+                </div>
+
+                <div style="background: var(--navy); color: white; padding: 1.5rem; border-radius: 6px;">
+                    <div class="result-label" style="color: rgba(255,255,255,0.75);">Velocity Head</div>
+                    <div class="result-value" id="c1VelHeadFt" style="color: white; font-size: 1.8rem;">—</div>
+                    <div class="result-unit">ft</div>
+
+                    <div style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.85;">
+                        <span id="c1VelHeadPsi">—</span> psi
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section D: TDH Builder -->
+            <div class="card">
+                <div class="card-title">Total Dynamic Head Builder</div>
+
+                <div class="form-group">
+                    <label>Static Head (elevation, ft)</label>
+                    <input type="number" id="c1StaticHead" step="0.1" placeholder="0" oninput="calcHeadPressure()">
+                    <div class="hint">Positive = pump below, Negative = pump above</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Suction Friction (ft)</label>
+                    <input type="number" id="c1SuctionFric" step="0.1" placeholder="0" oninput="calcHeadPressure()">
+                </div>
+
+                <div class="form-group">
+                    <label>Discharge Friction (ft)</label>
+                    <input type="number" id="c1DischargeFric" step="0.1" placeholder="0" oninput="calcHeadPressure()">
+                </div>
+
+                <div class="form-group">
+                    <label>Suction Tank Pressure (psig)</label>
+                    <input type="number" id="c1SuctionPress" step="0.1" placeholder="0" oninput="calcHeadPressure()">
+                </div>
+
+                <div class="form-group">
+                    <label>Discharge Tank/System Pressure (psig)</label>
+                    <input type="number" id="c1DischargePress" step="0.1" placeholder="0" oninput="calcHeadPressure()">
+                </div>
+
+                <div style="background: var(--blue-accent); color: white; padding: 1.5rem; border-radius: 6px; margin-top: 1rem;">
+                    <div class="result-label" style="color: rgba(255,255,255,0.75);">TDH</div>
+                    <div class="result-value" id="c1Tdh" style="color: white; font-size: 1.8rem;">—</div>
+                    <div class="result-unit">ft</div>
+
+                    <div style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.85;">
+                        <span id="c1TdhPsi">—</span> psi
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 4: NPSHa - Centrifugal Pumps -->
+    <div class="tab-content">
+        <div class="calc-container">
+            <div class="card">
+                <div class="card-title">System Configuration</div>
+
+                <div class="form-group">
+                    <label>Suction System Type</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="n1Open" name="n1Type" value="open" checked oninput="calcNpshaC()">
+                            <label for="n1Open" style="margin:0;">Open Tank (Atmospheric)</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="n1Pressurized" name="n1Type" value="pressurized" oninput="calcNpshaC()">
+                            <label for="n1Pressurized" style="margin:0;">Pressurized/Vacuum Tank</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="n1Flooded" name="n1Type" value="flooded" oninput="calcNpshaC()">
+                            <label for="n1Flooded" style="margin:0;">Flooded Suction</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="n1Lift" name="n1Type" value="lift" oninput="calcNpshaC()">
+                            <label for="n1Lift" style="margin:0;">Suction Lift</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Atmospheric Pressure (psia)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="n1Patm" step="0.1" placeholder="14.7" value="14.7" oninput="calcNpshaC()">
+                        <div class="unit">psia</div>
+                    </div>
+                    <div class="hint">Auto-calculate from elevation (ft):</div>
+                    <input type="number" id="n1Elevation" step="1" placeholder="Sea level" oninput="updateAtmPressure()">
+                </div>
+
+                <div class="form-group">
+                    <label>Tank/Surface Pressure (psig)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="n1TankPress" step="0.1" placeholder="0" value="0" oninput="calcNpshaC()">
+                        <div class="unit">psig</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Static Suction Head (ft)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="n1StaticHead" step="0.1" placeholder="0" oninput="calcNpshaC()">
+                        <div class="unit">ft</div>
+                    </div>
+                    <div class="hint">Positive = pump below surface (flooded)</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Vapor Pressure (psia)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="n1Pvap" step="0.01" placeholder="0.34" oninput="calcNpshaC()">
+                        <div class="unit">psia</div>
+                    </div>
+                    <div class="hint">Auto-fill from Fluid Properties tab</div>
+                </div>
+
+                <div class="form-group">
+                    <label>Specific Gravity</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="n1SG" step="0.01" placeholder="1.00" value="1.00" oninput="calcNpshaC()">
+                        <div class="unit">—</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Suction Line Friction Loss (ft)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="n1SuctionFric" step="0.1" placeholder="0" oninput="calcNpshaC()">
+                        <div class="unit">ft</div>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="form-group">
+                    <label>NPSHr (pump requirement, ft) — Optional</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="n1NPSHr" step="0.1" placeholder="0">
+                        <div class="unit">ft</div>
+                    </div>
+                    <div class="hint">For margin comparison only</div>
+                </div>
+            </div>
+
+            <div class="results-panel">
+                <div class="card-title" style="color: white;">NPSHa Calculation</div>
+
+                <div class="result-item">
+                    <div class="result-label">NPSHa Available</div>
+                    <div class="result-value" id="resultNpshaC">—</div>
+                    <div class="result-unit">ft</div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div id="npshaMarginCheck" style="display:none;">
+                    <div class="result-item">
+                        <div class="result-label">NPSHr (Manufacturer)</div>
+                        <div class="result-value" id="resultNPSHr">—</div>
+                        <div class="result-unit">ft</div>
+                    </div>
+
+                    <div class="result-item">
+                        <div class="result-label">Safety Margin</div>
+                        <div class="result-value" id="resultMargin">—</div>
+                        <div class="result-subtitle" id="marginStatus"></div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <div class="result-item">
+                        <div class="result-label">Max Recommended NPSHr</div>
+                        <div class="result-value" id="resultMaxNpshr">—</div>
+                        <div class="result-unit">ft (NPSHa / 1.5)</div>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="result-item">
+                    <div class="result-label">Calculation Breakdown</div>
+                    <table class="breakdown-table">
+                        <tr>
+                            <th>Term</th>
+                            <th>Value (ft)</th>
+                        </tr>
+                        <tr>
+                            <td>Atmospheric Pressure</td>
+                            <td id="breakdown_patm">—</td>
+                        </tr>
+                        <tr>
+                            <td>Tank Pressure</td>
+                            <td id="breakdown_ptank">—</td>
+                        </tr>
+                        <tr>
+                            <td>Static Head</td>
+                            <td id="breakdown_zs">—</td>
+                        </tr>
+                        <tr>
+                            <td>Vapor Pressure</td>
+                            <td id="breakdown_pvap">—</td>
+                        </tr>
+                        <tr>
+                            <td>Suction Friction</td>
+                            <td id="breakdown_hf">—</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div id="npshaWarnings"></div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="copyNpshaResults()">Copy Results</button>
+                </div>
+
+                <div class="formula-ref">
+                    <div class="formula-ref-title" onclick="toggleFormula(this)">View Formulas ➜</div>
+                    <div class="formula-ref-content">
+                        <code>NPSHa = (Patm + Ptank) × 2.307/SG + Zs - Pvap × 2.307/SG - hf_suction</code>
+                        <code>Margin = NPSHa - NPSHr</code>
+                        <code>Patm (elevation) = 14.7 × (1 - h/145366)^5.2561</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 5: NPSHa - PD Pumps -->
+    <div class="tab-content">
+        <div class="calc-container">
+            <div class="card">
+                <div class="card-title">Pump & Fluid Inputs</div>
+
+                <div class="section-title">Fluid Properties</div>
+
+                <div class="form-group">
+                    <label>Specific Gravity</label>
+                    <input type="number" id="n2SG" step="0.01" placeholder="1.00" value="1.00" oninput="calcNipaPD()">
+                </div>
+
+                <div class="form-group">
+                    <label>Vapor Pressure (psia)</label>
+                    <input type="number" id="n2Pvap" step="0.01" placeholder="0.34" oninput="calcNipaPD()">
+                </div>
+
+                <div class="form-group">
+                    <label>Fluid Compressibility Factor (K)</label>
+                    <select id="n2CompFactor" oninput="calcNipaPD()">
+                        <option value="1.0">Highly aerated (K=1.0)</option>
+                        <option value="1.3">Oil with dissolved air (K=1.3)</option>
+                        <option value="1.4" selected>Slightly compressible / Standard (K=1.4)</option>
+                        <option value="1.7">Deaerated water (K=1.7)</option>
+                        <option value="custom">Custom</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="n2CustomKGroup" style="display:none;">
+                    <label>Custom K Value</label>
+                    <input type="number" id="n2CustomK" step="0.1" placeholder="1.4" oninput="calcNipaPD()">
+                </div>
+
+                <div class="section-title">Pump</div>
+
+                <div class="form-group">
+                    <label>Pump Type & Configuration</label>
+                    <select id="n2PumpType" oninput="calcNipaPD()">
+                        <option value="">— Select —</option>
+                        <option value="0.5">Simplex Single-Acting (C=0.50)</option>
+                        <option value="1.0">Simplex Double-Acting (C=1.00)</option>
+                        <option value="1.0">Duplex Single-Acting (C=1.00)</option>
+                        <option value="2.0">Duplex Double-Acting (C=2.00)</option>
+                        <option value="1.5">Triplex Single-Acting (C=1.50)</option>
+                        <option value="2.5">Quintuplex Single-Acting (C=2.50)</option>
+                    </select>
+                </div>
+
+                <div class="two-column">
+                    <div class="form-group">
+                        <label>Pump Speed (RPM)</label>
+                        <input type="number" id="n2Speed" step="1" placeholder="0" oninput="calcNipaPD()">
+                    </div>
+                    <div class="form-group">
+                        <label>Plunger Diameter (in)</label>
+                        <input type="number" id="n2PlungerDia" step="0.01" placeholder="0" oninput="calcNipaPD()">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Stroke Length (in)</label>
+                    <input type="number" id="n2Stroke" step="0.01" placeholder="0" oninput="calcNipaPD()">
+                </div>
+
+                <div class="section-title">Suction System</div>
+
+                <div class="form-group">
+                    <label>Atmospheric Pressure (psia)</label>
+                    <input type="number" id="n2Patm" step="0.1" placeholder="14.7" value="14.7" oninput="calcNipaPD()">
+                </div>
+
+                <div class="form-group">
+                    <label>Tank Pressure (psig)</label>
+                    <input type="number" id="n2TankPress" step="0.1" placeholder="0" value="0" oninput="calcNipaPD()">
+                </div>
+
+                <div class="form-group">
+                    <label>Static Suction Head (ft)</label>
+                    <input type="number" id="n2StaticHead" step="0.1" placeholder="0" oninput="calcNipaPD()">
+                </div>
+
+                <div class="form-group">
+                    <label>Suction Line Length (ft)</label>
+                    <input type="number" id="n2LineLength" step="0.1" placeholder="0" oninput="calcNipaPD()">
+                </div>
+
+                <div class="form-group">
+                    <label>Suction Line ID (inches)</label>
+                    <input type="number" id="n2LineID" step="0.01" placeholder="0" oninput="calcNipaPD()">
+                </div>
+
+                <div class="form-group">
+                    <label>Suction Line Friction Loss (ft)</label>
+                    <input type="number" id="n2Friction" step="0.1" placeholder="0" oninput="calcNipaPD()">
+                </div>
+            </div>
+
+            <div class="results-panel">
+                <div class="card-title" style="color: white;">NIPA & NPIPR</div>
+
+                <div class="result-item">
+                    <div class="result-label">Suction Line Velocity</div>
+                    <div class="result-value" id="resultN2VelSuction">—</div>
+                    <div class="result-unit">ft/s</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Acceleration Head (Ha)</div>
+                    <div class="result-value" id="resultN2AccelHead">—</div>
+                    <div class="result-unit">ft</div>
+                    <div class="result-subtitle">Energy required to accelerate fluid each stroke</div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="result-item">
+                    <div class="result-label">NIPA (Available)</div>
+                    <div class="result-value" id="resultN2NIPA">—</div>
+                    <div class="result-unit">ft</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">NPIPR (Required)</div>
+                    <div class="result-value" id="resultN2NPIPR">—</div>
+                    <div class="result-unit">ft</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Margin</div>
+                    <div class="result-value" id="resultN2Margin">—</div>
+                    <div class="result-subtitle" id="marginStatusPD"></div>
+                </div>
+
+                <div id="nipsWarnings"></div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="copyNipaResults()">Copy Results</button>
+                </div>
+
+                <div class="formula-ref">
+                    <div class="formula-ref-title" onclick="toggleFormula(this)">View Formulas ➜</div>
+                    <div class="formula-ref-content">
+                        <code>Q_per_stroke = π × (Dp/24)² × (stroke/12) ft³</code>
+                        <code>Ha = (L × Vs × N × C) / (K × 32.174) ft</code>
+                        <code>NIPA = (Patm + Ptank) × 2.307/SG + Zs - Pvap × 2.307/SG - hf</code>
+                        <code>NPIPR = Ha + 2.0 ft</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 6: Affinity Laws -->
+    <div class="tab-content">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 1400px; margin: 0 auto; padding: 2rem;">
+            <!-- Section A: Speed Change -->
+            <div class="card">
+                <div class="card-title">Speed Change (VFD)</div>
+
+                <div class="form-group">
+                    <label>Original Speed (RPM)</label>
+                    <input type="number" id="a1N1" step="1" placeholder="0" oninput="calcAffinity1()">
+                </div>
+
+                <div class="form-group">
+                    <label>New Speed (RPM)</label>
+                    <input type="number" id="a1N2" step="1" placeholder="0" oninput="calcAffinity1()">
+                </div>
+
+                <div class="form-group">
+                    <label>Original Flow (GPM)</label>
+                    <input type="number" id="a1Q1" step="0.1" placeholder="0" oninput="calcAffinity1()">
+                </div>
+
+                <div class="form-group">
+                    <label>Original Head (ft)</label>
+                    <input type="number" id="a1H1" step="0.1" placeholder="0" oninput="calcAffinity1()">
+                </div>
+
+                <div class="form-group">
+                    <label>Original Power (hp)</label>
+                    <input type="number" id="a1P1" step="0.01" placeholder="0" oninput="calcAffinity1()">
+                </div>
+
+                <div style="background: var(--navy); color: white; padding: 1.5rem; border-radius: 6px;">
+                    <div class="result-label" style="color: rgba(255,255,255,0.75);">Results at New Speed</div>
+
+                    <div style="margin-top: 1rem;">
+                        <div style="margin-bottom: 1rem;">
+                            <div style="font-size: 0.75rem; text-transform: uppercase; opacity: 0.75; margin-bottom: 0.5rem;">New Flow</div>
+                            <div style="font-size: 1.5rem; font-weight: 700; font-family: 'Courier New', monospace;" id="resultA1Q2">—</div>
+                            <div style="font-size: 0.85rem; opacity: 0.75;">GPM (<span id="resultA1QChg">—</span>)</div>
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <div style="font-size: 0.75rem; text-transform: uppercase; opacity: 0.75; margin-bottom: 0.5rem;">New Head</div>
+                            <div style="font-size: 1.5rem; font-weight: 700; font-family: 'Courier New', monospace;" id="resultA1H2">—</div>
+                            <div style="font-size: 0.85rem; opacity: 0.75;">ft (<span id="resultA1HChg">—</span>)</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.75rem; text-transform: uppercase; opacity: 0.75; margin-bottom: 0.5rem;">New Power</div>
+                            <div style="font-size: 1.5rem; font-weight: 700; font-family: 'Courier New', monospace;" id="resultA1P2">—</div>
+                            <div style="font-size: 0.85rem; opacity: 0.75;">hp (<span id="resultA1PChg">—</span>)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="formula-ref" style="margin-top: 2rem;">
+                    <div class="formula-ref-title" onclick="toggleFormula(this)">View Formulas ➜</div>
+                    <div class="formula-ref-content">
+                        <code>Q₂ = Q₁ × (N₂/N₁)</code>
+                        <code>H₂ = H₁ × (N₂/N₁)²</code>
+                        <code>P₂ = P₁ × (N₂/N₁)³</code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section B: Impeller Trim -->
+            <div class="card">
+                <div class="card-title">Impeller Trim</div>
+
+                <div class="form-group">
+                    <label>Original Impeller Diameter (in)</label>
+                    <input type="number" id="a2D1" step="0.01" placeholder="0" oninput="calcAffinity2()">
+                </div>
+
+                <div class="form-group">
+                    <label>New Impeller Diameter (in)</label>
+                    <input type="number" id="a2D2" step="0.01" placeholder="0" oninput="calcAffinity2()">
+                </div>
+
+                <div class="form-group">
+                    <label>Original Flow (GPM)</label>
+                    <input type="number" id="a2Q1" step="0.1" placeholder="0" oninput="calcAffinity2()">
+                </div>
+
+                <div class="form-group">
+                    <label>Original Head (ft)</label>
+                    <input type="number" id="a2H1" step="0.1" placeholder="0" oninput="calcAffinity2()">
+                </div>
+
+                <div class="form-group">
+                    <label>Original Power (hp)</label>
+                    <input type="number" id="a2P1" step="0.01" placeholder="0" oninput="calcAffinity2()">
+                </div>
+
+                <div style="background: var(--navy); color: white; padding: 1.5rem; border-radius: 6px;">
+                    <div class="result-label" style="color: rgba(255,255,255,0.75);">Results After Trim</div>
+
+                    <div style="margin-top: 1rem;">
+                        <div style="margin-bottom: 1rem;">
+                            <div style="font-size: 0.75rem; text-transform: uppercase; opacity: 0.75; margin-bottom: 0.5rem;">New Flow</div>
+                            <div style="font-size: 1.5rem; font-weight: 700; font-family: 'Courier New', monospace;" id="resultA2Q2">—</div>
+                            <div style="font-size: 0.85rem; opacity: 0.75;">GPM (<span id="resultA2QChg">—</span>)</div>
+                        </div>
+                        <div style="margin-bottom: 1rem;">
+                            <div style="font-size: 0.75rem; text-transform: uppercase; opacity: 0.75; margin-bottom: 0.5rem;">New Head</div>
+                            <div style="font-size: 1.5rem; font-weight: 700; font-family: 'Courier New', monospace;" id="resultA2H2">—</div>
+                            <div style="font-size: 0.85rem; opacity: 0.75;">ft (<span id="resultA2HChg">—</span>)</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.75rem; text-transform: uppercase; opacity: 0.75; margin-bottom: 0.5rem;">New Power</div>
+                            <div style="font-size: 1.5rem; font-weight: 700; font-family: 'Courier New', monospace;" id="resultA2P2">—</div>
+                            <div style="font-size: 0.85rem; opacity: 0.75;">hp (<span id="resultA2PChg">—</span>)</div>
+                        </div>
+                    </div>
+
+                    <div id="trimWarning" style="display:none; margin-top: 1rem; padding: 1rem; background: rgba(245, 158, 11, 0.2); border-radius: 4px; font-size: 0.85rem;">
+                        ⚠ Trim exceeds 20% — affinity laws become less accurate. Verify with manufacturer.
+                    </div>
+                </div>
+
+                <div class="formula-ref" style="margin-top: 2rem;">
+                    <div class="formula-ref-title" onclick="toggleFormula(this)">View Formulas ➜</div>
+                    <div class="formula-ref-content">
+                        <code>Q₂ = Q₁ × (D₂/D₁)</code>
+                        <code>H₂ = H₁ × (D₂/D₁)²</code>
+                        <code>P₂ = P₁ × (D₂/D₁)³</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TAB 7: BHP & Motor Sizing -->
+    <div class="tab-content">
+        <div class="calc-container">
+            <div class="card">
+                <div class="card-title">Pump Performance Inputs</div>
+
+                <div class="form-group">
+                    <label>Flow Rate (GPM)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="b1Flow" step="0.1" placeholder="0" oninput="calcBHP()">
+                        <div class="unit">GPM</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Total Dynamic Head (ft)</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="b1Head" step="0.1" placeholder="0" oninput="calcBHP()">
+                        <div class="unit">ft</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Specific Gravity</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="b1SG" step="0.01" placeholder="1.00" value="1.00" oninput="calcBHP()">
+                        <div class="unit">—</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Pump Efficiency (%)</label>
+                    <div class="slider-container">
+                        <input type="range" id="b1Eff" min="40" max="95" step="1" value="75" oninput="calcBHP()">
+                        <div class="slider-value" id="b1EffValue">75%</div>
+                    </div>
+                    <div class="hint">Drag slider or enter manually</div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="section-title">Specific Speed Lookup (Optional)</div>
+                <div class="hint">Helps estimate efficiency from pump duty point</div>
+
+                <div class="form-group">
+                    <label>Speed (RPM)</label>
+                    <input type="number" id="b1Ns_N" step="1" placeholder="0" oninput="calcSpecificSpeed()">
+                </div>
+
+                <div class="form-group">
+                    <label>Flow (GPM)</label>
+                    <input type="number" id="b1Ns_Q" step="0.1" placeholder="0" oninput="calcSpecificSpeed()">
+                </div>
+
+                <div class="form-group">
+                    <label>Head (ft)</label>
+                    <input type="number" id="b1Ns_H" step="0.1" placeholder="0" oninput="calcSpecificSpeed()">
+                </div>
+
+                <div style="background: var(--bg-light); padding: 1rem; border-radius: 4px; margin-top: 1rem;">
+                    <div class="result-label">Specific Speed</div>
+                    <div style="font-size: 1.3rem; font-weight: 700; font-family: 'Courier New', monospace;">
+                        Ns = <span id="resultNsValue">—</span>
+                    </div>
+                    <div style="font-size: 0.85rem; margin-top: 0.5rem; color: var(--text-light);" id="resultNsClass">—</div>
+                </div>
+            </div>
+
+            <div class="results-panel">
+                <div class="card-title" style="color: white;">Motor & Power Sizing</div>
+
+                <div class="result-item">
+                    <div class="result-label">Hydraulic Power (PHP)</div>
+                    <div class="result-value" id="resultPHP">—</div>
+                    <div class="result-unit">hp</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">Required Brake Power (BHP)</div>
+                    <div class="result-value" id="resultBHP">—</div>
+                    <div class="result-unit">hp</div>
+                </div>
+
+                <div class="result-item">
+                    <div class="result-label">With Service Factor (1.15×)</div>
+                    <div class="result-value" id="resultMotorReq">—</div>
+                    <div class="result-unit">hp</div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="result-item">
+                    <div class="result-label">Recommended NEMA Motor Size</div>
+                    <div class="result-value" id="resultMotorSize">—</div>
+                    <div class="result-unit">hp</div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="result-item">
+                    <div class="result-label">Specific Speed</div>
+                    <div class="result-value" id="resultNs">—</div>
+                    <div class="result-subtitle" id="resultNsClassDesc"></div>
+                </div>
+
+                <div id="bhpWarnings"></div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-secondary" onclick="copyBHPResults()">Copy Results</button>
+                </div>
+
+                <div class="formula-ref">
+                    <div class="formula-ref-title" onclick="toggleFormula(this)">View Formulas ➜</div>
+                    <div class="formula-ref-content">
+                        <code>PHP = Q × H × SG / 3960</code>
+                        <code>BHP = PHP / (η/100)</code>
+                        <code>Motor_Size = BHP × 1.15 (next standard NEMA size)</code>
+                        <code>Ns = N × √Q / H^0.75</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ========== THEME TOGGLE ==========
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+            localStorage.setItem('pumpCalcTheme', document.body.classList.contains('dark') ? 'dark' : 'light');
+        }
+
+        window.addEventListener('load', () => {
+            if (localStorage.getItem('pumpCalcTheme') === 'dark') {
+                document.body.classList.add('dark');
+            }
+        });
+
+        // ========== TAB NAVIGATION ==========
+        function switchTab(n) {
+            const contents = document.querySelectorAll('.tab-content');
+            const buttons = document.querySelectorAll('.tab-button');
+            contents.forEach(c => c.classList.remove('active'));
+            buttons.forEach(b => b.classList.remove('active'));
+            contents[n].classList.add('active');
+            buttons[n].classList.add('active');
+        }
+
+        // ========== FORMULA TOGGLE ==========
+        function toggleFormula(elem) {
+            const content = elem.nextElementSibling;
+            content.classList.toggle('open');
+            elem.textContent = content.classList.contains('open') ? 'Hide Formulas ✕' : 'View Formulas ➜';
+        }
+
+        // ========== PIPE DATA ==========
+        const pipeIDs = {
+            '0.5': { '40': 0.622, '80': 0.546 },
+            '0.75': { '40': 0.824, '80': 0.742 },
+            '1': { '40': 1.049, '80': 0.957 },
+            '1.25': { '40': 1.380, '80': 1.278 },
+            '1.5': { '40': 1.610, '80': 1.500 },
+            '2': { '40': 2.067, '80': 1.939 },
+            '2.5': { '40': 2.469, '80': 2.323 },
+            '3': { '40': 3.068, '80': 2.900 },
+            '4': { '40': 4.026, '80': 3.826 },
+            '6': { '40': 6.065, '80': 5.761 },
+            '8': { '40': 7.981, '80': 7.625 },
+            '10': { '40': 10.020, '80': 9.750 },
+            '12': { '40': 11.938, '80': 11.626 }
+        };
+
+        const roughness = {
+            'Commercial Steel': 0.00015,
+            'Galvanized Steel': 0.0005,
+            'Cast Iron': 0.00085,
+            'PVC/HDPE': 0.000005,
+            'Stainless Steel': 0.00005,
+            'Drawn Tubing': 0.000005,
+            'Concrete': 0.004
+        };
+
+        const fluidDefaults = {
+            'Water (68°F)': { sg: 1.00, viscosity_cP: 1.0, vaporPressure_psia: 0.34 },
+            'Water (100°F)': { sg: 0.993, viscosity_cP: 0.68, vaporPressure_psia: 0.95 },
+            'Water (140°F)': { sg: 0.983, viscosity_cP: 0.47, vaporPressure_psia: 2.89 },
+            'Water (212°F)': { sg: 0.958, viscosity_cP: 0.28, vaporPressure_psia: 14.7 },
+            'Ethylene Glycol 50%': { sg: 1.07, viscosity_cP: 6.0, vaporPressure_psia: 0.1 },
+            'Mineral Oil ISO 32': { sg: 0.86, viscosity_cP: 28, vaporPressure_psia: 0.001 },
+            'Mineral Oil ISO 46': { sg: 0.87, viscosity_cP: 40, vaporPressure_psia: 0.001 },
+            'Mineral Oil ISO 68': { sg: 0.88, viscosity_cP: 59, vaporPressure_psia: 0.001 },
+            'Sulfuric Acid 93%': { sg: 1.83, viscosity_cP: 25, vaporPressure_psia: 0.001 },
+            'Sodium Hydroxide 50%': { sg: 1.53, viscosity_cP: 45, vaporPressure_psia: 0.01 },
+            'Hydrochloric Acid 35%': { sg: 1.18, viscosity_cP: 2.0, vaporPressure_psia: 3.5 }
+        };
+
+        const motorSizes = [0.5, 0.75, 1, 1.5, 2, 3, 5, 7.5, 10, 15, 20, 25, 30, 40, 50, 60, 75, 100, 125, 150, 200, 250, 300];
+
+        // ========== UTILITIES ==========
+        function n(val) { return parseFloat(val) || 0; }
+        function f(val, dec = 2) { return isFinite(val) ? val.toFixed(dec) : '—'; }
+        function p(val) { return val && !isNaN(val) && isFinite(val); }
+        function cd(id, val) { document.getElementById(id).textContent = val; }
+
+        // ========== TAB 0: FLUID PROPERTIES ==========
+        function updateFluidProperties() {
+            const name = document.getElementById('fluidName').value;
+            const defaults = fluidDefaults[name];
+            if (defaults) {
+                document.getElementById('fluidSG').value = defaults.sg;
+                document.getElementById('fluidViscosityCp').value = defaults.viscosity_cP;
+                document.getElementById('fluidVaporPressure').value = defaults.vaporPressure_psia;
+            }
+            calcFluidProps();
+        }
+
+        function calcFluidProps() {
+            const sg = n(document.getElementById('fluidSG').value);
+            const cp = n(document.getElementById('fluidViscosityCp').value);
+
+            const density = sg * 62.4;
+            const cst = cp / (sg || 1);
+
+            cd('resultDensity', f(density, 1));
+            cd('resultKinVis', f(cst, 2));
+
+            let classification = '—';
+            if (cst < 10) classification = 'Light';
+            else if (cst < 50) classification = 'Medium';
+            else if (cst < 200) classification = 'Heavy';
+            else classification = 'Very Heavy';
+
+            cd('resultFluidClass', classification);
+
+            document.getElementById('fluidDensity').value = f(density, 1);
+            document.getElementById('fluidViscosityCst').value = f(cst, 2);
+
+            const pvap = n(document.getElementById('fluidVaporPressure').value);
+            let warnings = '';
+            if (pvap > 1.0) {
+                warnings += '<div class="warning">⚠ High vapor pressure — check NPSHa carefully</div>';
+            }
+            if (cst > 100) {
+                warnings += '<div class="warning">⚠ Very high viscosity — may cause friction losses and flow issues</div>';
+            }
+            document.getElementById('fluidWarnings').innerHTML = warnings;
+        }
+
+        // ========== TAB 1: VELOCITY & REYNOLDS ==========
+        document.getElementById('v1Schedule').addEventListener('change', function() {
+            document.getElementById('customIdGroup').style.display = this.value === 'custom' ? 'block' : 'none';
+        });
+
+        function calcVelocity() {
+            const q = n(document.getElementById('v1FlowRate').value);
+            const sizeStr = document.getElementById('v1PipeSize').value;
+            const sched = document.getElementById('v1Schedule').value;
+            let id = 0;
+
+            if (sched === 'custom') {
+                id = n(document.getElementById('v1CustomId').value);
+            } else if (sizeStr && pipeIDs[sizeStr] && pipeIDs[sizeStr][sched]) {
+                id = pipeIDs[sizeStr][sched];
+            }
+
+            const visc = n(document.getElementById('v1Viscosity').value) || n(document.getElementById('fluidViscosityCst').value) || 1.0;
+            const appType = document.querySelector('input[name="v1AppType"]:checked').value;
+
+            cd('resultPipeID', f(id, 3));
+
+            if (!p(q) || !p(id) || id === 0) {
+                cd('resultVelocity', '—');
+                cd('resultRe', '—');
+                cd('reRegime', '');
+                document.getElementById('velocityWarnings').innerHTML = '';
+                return;
+            }
+
+            const idFt = id / 12;
+            const area = Math.PI * Math.pow(idFt / 2, 2);
+            const v = (q * 0.002228) / area;
+
+            const re = (v * idFt) / (visc * 1.076e-5);
+            let regime = 'Transitional';
+            if (re < 2300) regime = 'Laminar';
+            else if (re > 4000) regime = 'Turbulent';
+
+            cd('resultVelocity', f(v, 2));
+            cd('resultRe', f(re, 0));
+            cd('reRegime', `<span class="color-dot ${re < 2300 ? 'yellow' : re < 4000 ? 'yellow' : 'green'}"></span>${regime}`);
+
+            let warn = '';
+            const [vMin, vMax] = appType === 'suction' ? [0, 5] : [0, 10];
+            const [vWarn, vDanger] = appType === 'suction' ? [5, 8] : [10, 15];
+
+            if (v > vDanger) {
+                warn += `<div class="error">✕ Velocity ${f(v, 1)} ft/s exceeds recommended max of ${vDanger} ft/s — increase pipe size</div>`;
+            } else if (v > vWarn) {
+                warn += `<div class="warning">⚠ Velocity ${f(v, 1)} ft/s is approaching recommended max of ${vWarn} ft/s</div>`;
+            }
+            document.getElementById('velocityWarnings').innerHTML = warn;
+        }
+
+        // ========== TAB 2: FRICTION LOSS ==========
+        function calcFrictionLoss() {
+            const q = n(document.getElementById('f1FlowRate').value);
+            const id = n(document.getElementById('f1PipeID').value);
+            const len = n(document.getElementById('f1Length').value);
+            const material = document.getElementById('f1Material').value;
+            const visc = n(document.getElementById('f1Viscosity').value);
+            const sg = n(document.getElementById('f1SG').value) || 1.0;
+
+            if (!p(q) || !p(id) || !p(len) || !material || id === 0) {
+                ['resultF1Velocity', 'resultF1Re', 'resultF1Factor', 'resultF1MajorFt', 'resultF1MajorPsi', 'resultF1MinorFt', 'resultF1MinorPsi', 'resultF1TotalFt', 'resultF1TotalPsi', 'resultF1Per100'].forEach(rid => cd(rid, '—'));
+                return;
+            }
+
+            const idFt = id / 12;
+            const area = Math.PI * Math.pow(idFt / 2, 2);
+            const v = (q * 0.002228) / area;
+            const re = (v * idFt) / (visc * 1.076e-5);
+
+            let f;
+            if (re < 2300) {
+                f = 64 / re;
+            } else {
+                const e = roughness[material] || 0.00015;
+                const relRough = e / idFt;
+                const termLog = (relRough / 3.7) + (5.74 / Math.pow(re, 0.9));
+                f = 0.25 / Math.pow(Math.log10(termLog), 2);
+            }
+
+            const g = 32.174;
+            const hfMajor = f * (len / idFt) * (Math.pow(v, 2) / (2 * g));
+            const hfMajorPsi = (hfMajor * sg) / 2.307;
+
+            cd('resultF1Velocity', f(v, 2));
+            cd('resultF1Re', f(re, 0));
+            cd('resultF1Factor', f(f, 4));
+            cd('resultF1MajorFt', f(hfMajor, 2));
+            cd('resultF1MajorPsi', f(hfMajorPsi, 2));
+
+            // Minor losses
+            const fittings = [
+                { id: 'fitting_90lr', k: 0.32 },
+                { id: 'fitting_90', k: 0.9 },
+                { id: 'fitting_45', k: 0.4 },
+                { id: 'fitting_tees', k: 0.6 },
+                { id: 'fitting_teeb', k: 1.0 },
+                { id: 'fitting_gate', k: 0.2 },
+                { id: 'fitting_ball', k: 0.05 },
+                { id: 'fitting_globe', k: 10 },
+                { id: 'fitting_check', k: 2.0 },
+                { id: 'fitting_checkb', k: 1.5 },
+                { id: 'fitting_butterfly', k: 0.3 },
+                { id: 'fitting_entrance', k: 0.5 },
+                { id: 'fitting_exit', k: 1.0 }
+            ];
+
+            let sumK = 0;
+            fittings.forEach(fit => {
+                const qty = n(document.getElementById(fit.id).value);
+                sumK += qty * fit.k;
+            });
+
+            const hfMinor = sumK * (Math.pow(v, 2) / (2 * g));
+            const hfMinorPsi = (hfMinor * sg) / 2.307;
+
+            cd('resultF1MinorFt', f(hfMinor, 2));
+            cd('resultF1MinorPsi', f(hfMinorPsi, 2));
+
+            const hfTotal = hfMajor + hfMinor;
+            const hfTotalPsi = (hfTotal * sg) / 2.307;
+            const per100 = len > 0 ? (hfTotalPsi / len) * 100 : 0;
+
+            cd('resultF1TotalFt', f(hfTotal, 2));
+            cd('resultF1TotalPsi', f(hfTotalPsi, 2));
+            cd('resultF1Per100', f(per100, 2));
+        }
+
+        function copyFrictionResults() {
+            const text = `FRICTION LOSS CALCULATION\n\nFlow: ${document.getElementById('f1FlowRate').value} GPM\nPipe ID: ${document.getElementById('f1PipeID').value} in\nLength: ${document.getElementById('f1Length').value} ft\nMaterial: ${document.getElementById('f1Material').value}\n\nVelocity: ${document.getElementById('resultF1Velocity').textContent} ft/s\nMajor Loss: ${document.getElementById('resultF1TotalFt').textContent} ft (${document.getElementById('resultF1TotalPsi').textContent} psi)\nMinor Loss: ${document.getElementById('resultF1MinorFt').textContent} ft\nTotal Loss: ${document.getElementById('resultF1TotalPsi').textContent} psi`;
+            navigator.clipboard.writeText(text);
+            alert('Friction loss results copied to clipboard');
+        }
+
+        // ========== TAB 3: HEAD ↔ PRESSURE ==========
+        function calcHeadPressure() {
+            const sg = n(document.getElementById('c1SG').value) || 1.0;
+
+            // Section A: Head to Pressure
+            const headFt = n(document.getElementById('c1HeadFt').value);
+            if (p(headFt)) {
+                const psiVal = (headFt * sg) / 2.307;
+                const bar = psiVal / 14.5038;
+                const kpa = psiVal * 6.89476;
+                cd('c1PressurePsi', f(psiVal, 2));
+                cd('c1PressureBar', f(bar, 2));
+                cd('c1PressureKpa', f(kpa, 1));
+            } else {
+                cd('c1PressurePsi', '—');
+                cd('c1PressureBar', '—');
+                cd('c1PressureKpa', '—');
+            }
+
+            // Section B: Pressure to Head
+            const psiIn = n(document.getElementById('c1PressurePsiIn').value);
+            if (p(psiIn)) {
+                const headOut = (psiIn * 2.307) / sg;
+                const meterOut = headOut * 0.3048;
+                cd('c1HeadFtOut', f(headOut, 2));
+                cd('c1HeadMeter', f(meterOut, 2));
+            } else {
+                cd('c1HeadFtOut', '—');
+                cd('c1HeadMeter', '—');
+            }
+
+            // Section C: Velocity Head
+            const vel = n(document.getElementById('c1VelocityFts').value);
+            if (p(vel)) {
+                const g = 32.174;
+                const velHead = (Math.pow(vel, 2)) / (2 * g);
+                const velHeadPsi = (velHead * sg) / 2.307;
+                cd('c1VelHeadFt', f(velHead, 2));
+                cd('c1VelHeadPsi', f(velHeadPsi, 2));
+            } else {
+                cd('c1VelHeadFt', '—');
+                cd('c1VelHeadPsi', '—');
+            }
+
+            // Section D: TDH Builder
+            const staticHead = n(document.getElementById('c1StaticHead').value);
+            const suctionFric = n(document.getElementById('c1SuctionFric').value);
+            const dischargeFric = n(document.getElementById('c1DischargeFric').value);
+            const suctionPress = n(document.getElementById('c1SuctionPress').value);
+            const dischargePress = n(document.getElementById('c1DischargePress').value);
+
+            const pressureDiff = (dischargePress - suctionPress) * 2.307 / sg;
+            const tdh = staticHead + suctionFric + dischargeFric + pressureDiff;
+            const tdhPsi = (tdh * sg) / 2.307;
+
+            cd('c1Tdh', p(tdh) ? f(tdh, 2) : '—');
+            cd('c1TdhPsi', p(tdhPsi) ? f(tdhPsi, 2) : '—');
+        }
+
+        // ========== TAB 4: NPSHa - CENTRIFUGAL ==========
+        document.getElementById('n1Elevation').addEventListener('input', updateAtmPressure);
+
+        function updateAtmPressure() {
+            const elev = n(document.getElementById('n1Elevation').value);
+            if (p(elev)) {
+                const patm = 14.7 * Math.pow(1 - (elev / 145366), 5.2561);
+                document.getElementById('n1Patm').value = f(patm, 2);
+            }
+            calcNpshaC();
+        }
+
+        function calcNpshaC() {
+            const patm = n(document.getElementById('n1Patm').value) || 14.7;
+            const ptank = n(document.getElementById('n1TankPress').value);
+            const zs = n(document.getElementById('n1StaticHead').value);
+            const pvap = n(document.getElementById('n1Pvap').value);
+            const sg = n(document.getElementById('n1SG').value) || 1.0;
+            const hf = n(document.getElementById('n1SuctionFric').value);
+            const npshr = n(document.getElementById('n1NPSHr').value);
+
+            const pAbsTotal = patm + ptank;
+            const patmHead = (pAbsTotal * 2.307) / sg;
+            const pvapHead = (pvap * 2.307) / sg;
+
+            const npshaC = patmHead + zs - pvapHead - hf;
+            cd('resultNpshaC', p(npshaC) ? f(npshaC, 2) : '—');
+
+            // Breakdown
+            cd('breakdown_patm', f(patmHead, 2));
+            cd('breakdown_ptank', f((ptank * 2.307) / sg, 2));
+            cd('breakdown_zs', f(zs, 2));
+            cd('breakdown_pvap', f(-pvapHead, 2));
+            cd('breakdown_hf', f(-hf, 2));
+
+            // Margin check
+            const marginGroup = document.getElementById('npshaMarginCheck');
+            if (p(npshr) && npshr > 0) {
+                marginGroup.style.display = 'block';
+                const margin = npshaC - npshr;
+                const safetyRatio = npshaC / npshr;
+
+                cd('resultNPSHr', f(npshr, 2));
+                cd('resultMargin', f(margin, 2));
+
+                let status = '';
+                if (safetyRatio >= 1.5) {
+                    status = '<span class="color-dot green"></span>Safe (Ratio ≥ 1.5)';
+                } else if (safetyRatio >= 1.0) {
+                    status = '<span class="color-dot yellow"></span>Marginal (Ratio ≥ 1.0)';
+                } else {
+                    status = '<span class="color-dot red"></span>CAVITATION RISK (Ratio < 1.0)';
+                }
+                cd('marginStatus', status);
+
+                cd('resultMaxNpshr', f(npshaC / 1.5, 2));
+            } else {
+                marginGroup.style.display = 'none';
+            }
+
+            // Warnings
+            let warns = '';
+            if (zs < 0) {
+                warns += '<div class="warning">⚠ Suction lift detected — verify pump can self-prime and check NPSH carefully</div>';
+            }
+            if (pvap > 1.0) {
+                warns += '<div class="warning">⚠ High vapor pressure — reconsider suction configuration to improve NPSHa</div>';
+            }
+            if (npshaC < 2.0 && npshaC > 0) {
+                warns += '<div class="warning">⚠ Low NPSHa — limited margin; consider system modifications</div>';
+            }
+            document.getElementById('npshaWarnings').innerHTML = warns;
+        }
+
+        function copyNpshaResults() {
+            const text = `NPSHa CALCULATION (CENTRIFUGAL)\n\nAtm Pressure: ${document.getElementById('n1Patm').value} psia\nTank Pressure: ${document.getElementById('n1TankPress').value} psig\nStatic Head: ${document.getElementById('n1StaticHead').value} ft\nVapor Pressure: ${document.getElementById('n1Pvap').value} psia\nSuction Friction: ${document.getElementById('n1SuctionFric').value} ft\n\nNPSHa Available: ${document.getElementById('resultNpshaC').textContent} ft`;
+            navigator.clipboard.writeText(text);
+            alert('NPSHa results copied to clipboard');
+        }
+
+        // ========== TAB 5: NPSHa - PD PUMPS ==========
+        document.getElementById('n2CompFactor').addEventListener('change', function() {
+            document.getElementById('n2CustomKGroup').style.display = this.value === 'custom' ? 'block' : 'none';
+        });
+
+        function calcNipaPD() {
+            const sg = n(document.getElementById('n2SG').value) || 1.0;
+            const pvap = n(document.getElementById('n2Pvap').value);
+            let k = n(document.getElementById('n2CompFactor').value);
+            if (document.getElementById('n2CompFactor').value === 'custom') {
+                k = n(document.getElementById('n2CustomK').value) || 1.4;
+            }
+
+            const cVal = n(document.getElementById('n2PumpType').value);
+            const speed = n(document.getElementById('n2Speed').value);
+            const dPlunger = n(document.getElementById('n2PlungerDia').value);
+            const stroke = n(document.getElementById('n2Stroke').value);
+
+            const patm = n(document.getElementById('n2Patm').value) || 14.7;
+            const ptank = n(document.getElementById('n2TankPress').value);
+            const zs = n(document.getElementById('n2StaticHead').value);
+            const lineLen = n(document.getElementById('n2LineLength').value);
+            const lineID = n(document.getElementById('n2LineID').value);
+            const hf = n(document.getElementById('n2Friction').value);
+
+            if (!p(cVal) || !p(speed) || !p(dPlunger) || !p(stroke)) {
+                ['resultN2VelSuction', 'resultN2AccelHead', 'resultN2NIPA', 'resultN2NPIPR', 'resultN2Margin'].forEach(rid => cd(rid, '—'));
+                return;
+            }
+
+            const n_rev = speed / 60;
+            const qPerStroke = Math.PI * Math.pow(dPlunger / 24, 2) * (stroke / 12);
+            const qTotal = qPerStroke * n_rev * cVal;
+
+            const lineIDFt = lineID / 12;
+            const lineArea = Math.PI * Math.pow(lineIDFt / 2, 2);
+            const vSuction = qTotal / lineArea;
+
+            cd('resultN2VelSuction', f(vSuction, 2));
+
+            const g = 32.174;
+            const ha = (lineLen * vSuction * n_rev * cVal) / (k * g);
+            cd('resultN2AccelHead', f(ha, 2));
+
+            const pAbsTotal = patm + ptank;
+            const patmHead = (pAbsTotal * 2.307) / sg;
+            const pvapHead = (pvap * 2.307) / sg;
+
+            const nipa = patmHead + zs - pvapHead - hf;
+            const npipr = ha + 2.0;
+            const margin = nipa - npipr;
+
+            cd('resultN2NIPA', f(nipa, 2));
+            cd('resultN2NPIPR', f(npipr, 2));
+            cd('resultN2Margin', f(margin, 2));
+
+            let marginStatus = '';
+            if (margin >= 0) {
+                marginStatus = '<span class="color-dot green"></span>Safe';
+            } else {
+                marginStatus = '<span class="color-dot red"></span>Insufficient margin';
+            }
+            cd('marginStatusPD', marginStatus);
+
+            let warns = '';
+            if (ha > 0.5 * nipa && nipa > 0) {
+                warns += '<div class="warning">⚠ High acceleration head — consider suction stabilizer or accumulat or</div>';
+            }
+            if (lineLen > 10) {
+                warns += '<div class="warning">⚠ Long suction line increases acceleration head — keep suction lines short on PD pumps</div>';
+            }
+            document.getElementById('nipsWarnings').innerHTML = warns;
+        }
+
+        function copyNipaResults() {
+            const text = `NIPA CALCULATION (PD PUMP)\n\nPump Type: ${document.getElementById('n2PumpType').value}\nSpeed: ${document.getElementById('n2Speed').value} RPM\nPlunger Dia: ${document.getElementById('n2PlungerDia').value} in\nStroke: ${document.getElementById('n2Stroke').value} in\n\nAcceleration Head: ${document.getElementById('resultN2AccelHead').textContent} ft\nNIPA Available: ${document.getElementById('resultN2NIPA').textContent} ft\nNPIPR Required: ${document.getElementById('resultN2NPIPR').textContent} ft\nMargin: ${document.getElementById('resultN2Margin').textContent} ft`;
+            navigator.clipboard.writeText(text);
+            alert('NIPA results copied to clipboard');
+        }
+
+        // ========== TAB 6: AFFINITY LAWS ==========
+        function calcAffinity1() {
+            const n1 = n(document.getElementById('a1N1').value);
+            const n2 = n(document.getElementById('a1N2').value);
+            const q1 = n(document.getElementById('a1Q1').value);
+            const h1 = n(document.getElementById('a1H1').value);
+            const p1 = n(document.getElementById('a1P1').value);
+
+            if (!p(n1) || !p(n2) || n1 === 0) {
+                ['resultA1Q2', 'resultA1H2', 'resultA1P2', 'resultA1QChg', 'resultA1HChg', 'resultA1PChg'].forEach(rid => cd(rid, '—'));
+                return;
+            }
+
+            const ratio = n2 / n1;
+
+            const q2 = q1 * ratio;
+            const h2 = h1 * Math.pow(ratio, 2);
+            const p2 = p1 * Math.pow(ratio, 3);
+
+            const qChg = ((q2 - q1) / q1 * 100).toFixed(0);
+            const hChg = ((h2 - h1) / h1 * 100).toFixed(0);
+            const pChg = ((p2 - p1) / p1 * 100).toFixed(0);
+
+            cd('resultA1Q2', f(q2, 1));
+            cd('resultA1H2', f(h2, 1));
+            cd('resultA1P2', f(p2, 2));
+            cd('resultA1QChg', `${qChg > 0 ? '+' : ''}${qChg}%`);
+            cd('resultA1HChg', `${hChg > 0 ? '+' : ''}${hChg}%`);
+            cd('resultA1PChg', `${pChg > 0 ? '+' : ''}${pChg}%`);
+        }
+
+        function calcAffinity2() {
+            const d1 = n(document.getElementById('a2D1').value);
+            const d2 = n(document.getElementById('a2D2').value);
+            const q1 = n(document.getElementById('a2Q1').value);
+            const h1 = n(document.getElementById('a2H1').value);
+            const p1 = n(document.getElementById('a2P1').value);
+
+            if (!p(d1) || !p(d2) || d1 === 0) {
+                ['resultA2Q2', 'resultA2H2', 'resultA2P2', 'resultA2QChg', 'resultA2HChg', 'resultA2PChg'].forEach(rid => cd(rid, '—'));
+                return;
+            }
+
+            const ratio = d2 / d1;
+            const trimPercent = Math.abs((d2 - d1) / d1 * 100);
+
+            const q2 = q1 * ratio;
+            const h2 = h1 * Math.pow(ratio, 2);
+            const p2 = p1 * Math.pow(ratio, 3);
+
+            const qChg = ((q2 - q1) / q1 * 100).toFixed(0);
+            const hChg = ((h2 - h1) / h1 * 100).toFixed(0);
+            const pChg = ((p2 - p1) / p1 * 100).toFixed(0);
+
+            cd('resultA2Q2', f(q2, 1));
+            cd('resultA2H2', f(h2, 1));
+            cd('resultA2P2', f(p2, 2));
+            cd('resultA2QChg', `${qChg > 0 ? '+' : ''}${qChg}%`);
+            cd('resultA2HChg', `${hChg > 0 ? '+' : ''}${hChg}%`);
+            cd('resultA2PChg', `${pChg > 0 ? '+' : ''}${pChg}%`);
+
+            document.getElementById('trimWarning').style.display = trimPercent > 20 ? 'block' : 'none';
+        }
+
+        // ========== TAB 7: BHP & MOTOR SIZING ==========
+        document.getElementById('b1Eff').addEventListener('input', function() {
+            document.getElementById('b1EffValue').textContent = this.value + '%';
+            calcBHP();
+        });
+
+        document.getElementById('b1CompFactor').addEventListener('change', function() {
+            document.getElementById('n2CustomKGroup').style.display = this.value === 'custom' ? 'block' : 'none';
+        });
+
+        function calcBHP() {
+            const q = n(document.getElementById('b1Flow').value);
+            const h = n(document.getElementById('b1Head').value);
+            const sg = n(document.getElementById('b1SG').value) || 1.0;
+            const eff = n(document.getElementById('b1Eff').value) || 75;
+
+            if (!p(q) || !p(h) || q === 0 || h === 0) {
+                ['resultPHP', 'resultBHP', 'resultMotorReq', 'resultMotorSize'].forEach(rid => cd(rid, '—'));
+                document.getElementById('bhpWarnings').innerHTML = '';
+                return;
+            }
+
+            const php = (q * h * sg) / 3960;
+            const bhp = php / (eff / 100);
+            const motorReq = bhp * 1.15;
+
+            let motorSize = motorSizes[0];
+            for (let ms of motorSizes) {
+                if (ms >= motorReq) {
+                    motorSize = ms;
+                    break;
+                }
+            }
+
+            cd('resultPHP', f(php, 2));
+            cd('resultBHP', f(bhp, 2));
+            cd('resultMotorReq', f(motorReq, 2));
+            cd('resultMotorSize', f(motorSize, 1));
+
+            let warns = '';
+            if (eff < 60) {
+                warns += '<div class="warning">⚠ Low efficiency — verify pump selection is appropriate for this duty point</div>';
+            }
+            document.getElementById('bhpWarnings').innerHTML = warns;
+        }
+
+        function calcSpecificSpeed() {
+            const n = n(document.getElementById('b1Ns_N').value);
+            const q = n(document.getElementById('b1Ns_Q').value);
+            const h = n(document.getElementById('b1Ns_H').value);
+
+            if (!p(n) || !p(q) || !p(h) || h === 0) {
+                cd('resultNsValue', '—');
+                cd('resultNsClass', '—');
+                return;
+            }
+
+            const ns = n * Math.sqrt(q) / Math.pow(h, 0.75);
+            cd('resultNsValue', f(ns, 0));
+
+            let classification = '';
+            if (ns < 1000) classification = 'Very low speed (stable, high head)';
+            else if (ns < 2000) classification = 'Low speed (radial flow)';
+            else if (ns < 5000) classification = 'Medium speed (mixed flow)';
+            else if (ns < 10000) classification = 'High speed (axial flow)';
+            else classification = 'Very high speed (axial, low head)';
+
+            cd('resultNsClass', classification);
+            cd('resultNs', f(ns, 0));
+            cd('resultNsClassDesc', classification);
+        }
+
+        function copyBHPResults() {
+            const text = `BHP & MOTOR SIZING\n\nFlow: ${document.getElementById('b1Flow').value} GPM\nHead: ${document.getElementById('b1Head').value} ft\nSG: ${document.getElementById('b1SG').value}\nEfficiency: ${document.getElementById('b1Eff').value}%\n\nHydraulic Power: ${document.getElementById('resultPHP').textContent} hp\nBrake Power: ${document.getElementById('resultBHP').textContent} hp\nWith Service Factor: ${document.getElementById('resultMotorReq').textContent} hp\nRecommended Motor: ${document.getElementById('resultMotorSize').textContent} hp`;
+            navigator.clipboard.writeText(text);
+            alert('BHP results copied to clipboard');
+        }
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            calcFluidProps();
+        });
+    </script>
+</body>
+</html>
