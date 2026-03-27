@@ -3056,8 +3056,119 @@ ${document.getElementById('logDealHandoff').textContent}
       document.getElementById('mfrModal').classList.remove('active');
     }
 
+    // ===== URL PARAMETER PRE-FILL =====
+    // Skill-generated links: rfq-app.html?eq=centrifugal-pump&flowRate=200&totalHead=100&voltage=480&company=Dow
+    const URL_PARAM_MAP = {
+      'customer':              'headerCustomerName',
+      'company':               'headerCompany',
+      'phone':                 'headerPhone',
+      'email':                 'headerEmail',
+      'project':               'headerProjectTag',
+      'notes':                 'headerNotes',
+      'flowRate':              'flowRate',
+      'totalHead':             'totalHead',
+      'suctionPressure':       'suctionPressure',
+      'dischargePressure':     'dischargePressure',
+      'npsh':                  'npsh',
+      'fluidName':             'fluidName',
+      'fluidTemp':             'fluidTemp',
+      'specificGravity':       'specificGravity',
+      'viscosity':             'viscosity',
+      'vaporPressure':         'vaporPressure',
+      'ph':                    'pH',
+      'voltage':               'voltage',
+      'phase':                 'phase',
+      'frequency':             'frequency',
+      'areaClass':             'areaClass',
+      'sealType':              'sealType',
+      'drive':                 'drive',
+      'location':              'location',
+      'elevation':             'elevation',
+      'inletPressure':         'inletPressure',
+      'diffPressure':          'diffPressure',
+      'workingPressure':       'workingPressure',
+      'capacityMin':           'capacityMin',
+      'capacityMax':           'capacityMax',
+      'pressureMax':           'pressureMax',
+      'processFluid':          'processFluid',
+      'gasName':               'gasName',
+      'blowerFlowACFM':        'blowerFlowACFM',
+      'blowerFlowSCFM':        'blowerFlowSCFM',
+      'blowerInletPressure':   'blowerInletPressure',
+      'blowerDischargePressure':'blowerDischargePressure',
+      'agitFluid':             'agitFluid',
+      'agitVesselDia':         'agitVesselDia',
+      'agitLiquidLevel':       'agitLiquidLevel',
+      'rvMaterial':            'rvMaterial',
+      'rvBulkDensity':         'rvBulkDensity',
+      'rvCapacityLbHr':        'rvCapacityLbHr',
+      'service':               'service',
+      'startsPerDay':          'startsPerDay',
+      'ambientTempMin':        'ambientTempMin',
+      'ambientTempMax':        'ambientTempMax',
+      'casingMaterial':        'casingMaterial',
+      'impellerMaterial':      'impellerMaterial',
+      'solidsPercent':         'solidsPercent',
+      'particleSize':          'particleSize',
+    };
+
+    const HEADER_PARAMS = ['customer','company','phone','email','project','notes'];
+    const SKIP_PARAMS   = new Set(['eq','quoteType','rep']);
+
+    function loadURLParams() {
+      const params = new URLSearchParams(window.location.search);
+      if (!params.toString()) return;
+
+      const eq = params.get('eq');
+      if (eq) {
+        const sel = document.getElementById('equipmentSelect');
+        if (sel) { sel.value = eq; selectEquipmentFromDropdown(); }
+        setTimeout(() => _fillURLFields(params), 80);
+      } else {
+        _fillURLFields(params);
+      }
+
+      const qt = params.get('quoteType');
+      if (qt === 'Firm' || qt === 'Budgetary') setQuoteType(qt);
+    }
+
+    function _fillURLFields(params) {
+      let filledCount = 0;
+
+      HEADER_PARAMS.forEach(p => {
+        const val = params.get(p);
+        if (!val) return;
+        const el = document.getElementById(URL_PARAM_MAP[p]);
+        if (el) { el.value = decodeURIComponent(val); filledCount++; }
+      });
+
+      params.forEach((rawVal, key) => {
+        if (SKIP_PARAMS.has(key) || HEADER_PARAMS.includes(key)) return;
+        const val = decodeURIComponent(rawVal);
+        const fieldId = URL_PARAM_MAP[key] || key;
+        const el = document.getElementById(fieldId);
+        if (!el) return;
+        if (el.tagName === 'SELECT') {
+          Array.from(el.options).forEach(opt => {
+            if (opt.value === val || opt.text === val) el.value = opt.value;
+          });
+        } else if (el.type === 'radio' || el.type === 'checkbox') {
+          const target = document.querySelector(`input[name="${fieldId}"][value="${val}"]`);
+          if (target) target.checked = true;
+        } else {
+          el.value = val;
+        }
+        filledCount++;
+      });
+
+      if (filledCount > 0) {
+        showToast(`${filledCount} field(s) pre-filled from RFQ link`);
+      }
+    }
+
     // Init
     loadTheme();
+    loadURLParams();
   </script>
 </body>
 </html>
