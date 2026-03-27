@@ -570,6 +570,271 @@
       }
     }
 
+    /* Quote Type Toggle */
+    .quote-type-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--bg-secondary);
+      border-radius: 3px;
+      padding: 14px 20px;
+      margin-bottom: 20px;
+      border-left: 4px solid var(--accent-primary);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .quote-type-bar label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-label);
+      margin-bottom: 0;
+      white-space: nowrap;
+    }
+    .quote-type-buttons {
+      display: flex;
+      gap: 8px;
+    }
+    .qt-btn {
+      padding: 8px 20px;
+      border: 2px solid var(--border-color);
+      border-radius: 3px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+    .qt-btn.active-budgetary {
+      background: #2e7de9;
+      border-color: #2e7de9;
+      color: white;
+    }
+    .qt-btn.active-firm {
+      background: #1a2744;
+      border-color: #1a2744;
+      color: white;
+    }
+    body.dark .qt-btn.active-firm {
+      background: #4a6fa5;
+      border-color: #4a6fa5;
+    }
+    .quote-type-note {
+      font-size: 12px;
+      color: var(--text-secondary);
+      font-style: italic;
+      margin-left: 8px;
+    }
+    .quote-type-note.firm {
+      color: #dc3545;
+      font-weight: 600;
+      font-style: normal;
+    }
+
+    /* Multiple Options */
+    .options-bar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--bg-secondary);
+      border-radius: 3px;
+      padding: 12px 20px;
+      margin-bottom: 16px;
+      border-left: 4px solid #f37021;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .options-bar label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-label);
+      margin-bottom: 0;
+      white-space: nowrap;
+    }
+    .options-tabs {
+      display: flex;
+      gap: 6px;
+    }
+    .opt-tab {
+      padding: 6px 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 3px;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+    .opt-tab.active {
+      background: #f37021;
+      border-color: #f37021;
+      color: white;
+    }
+    .opt-tab.add-opt {
+      border-style: dashed;
+      color: var(--accent-primary);
+      border-color: var(--accent-primary);
+    }
+    .opt-tab.add-opt:hover {
+      background: rgba(46,125,233,0.1);
+    }
+    .option-label-badge {
+      display: inline-block;
+      background: #f37021;
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 2px 8px;
+      border-radius: 2px;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    /* Missing fields banner */
+    .missing-fields-banner {
+      background: rgba(220,53,69,0.1);
+      border: 1px solid #dc3545;
+      border-radius: 3px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .missing-fields-banner.show { display: block; }
+    .missing-fields-banner.warn {
+      background: rgba(255,193,7,0.1);
+      border-color: #ffc107;
+    }
+    .missing-fields-banner strong {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      color: #dc3545;
+    }
+    .missing-fields-banner.warn strong { color: #856404; }
+    body.dark .missing-fields-banner.warn strong { color: #ffc107; }
+    .missing-fields-banner ul {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 12px;
+      color: var(--text-primary);
+    }
+
+    /* Firm mode required highlight */
+    body.firm-mode input.req-missing,
+    body.firm-mode select.req-missing,
+    body.firm-mode textarea.req-missing {
+      border-color: #dc3545 !important;
+      box-shadow: 0 0 0 2px rgba(220,53,69,0.2) !important;
+    }
+
+    /* Skid section */
+    .skid-section-wrapper {
+      margin-top: 8px;
+    }
+
+    /* New button styles */
+    button.log-deal-btn {
+      background-color: #1a2744;
+      color: white;
+    }
+    button.log-deal-btn:hover {
+      background-color: #0d1520;
+    }
+    body.dark button.log-deal-btn {
+      background-color: #2e7de9;
+    }
+    body.dark button.log-deal-btn:hover {
+      background-color: #1e5fb8;
+    }
+    button.mfr-btn {
+      background-color: #198754;
+      color: white;
+    }
+    button.mfr-btn:hover {
+      background-color: #146c43;
+    }
+
+    /* Larger modal */
+    .modal-content.wide {
+      max-width: 620px;
+      width: 95%;
+    }
+    .modal-content.narrow {
+      max-width: 480px;
+      width: 95%;
+    }
+
+    /* Handoff output block */
+    .handoff-block {
+      background: var(--bg-section);
+      border: 1px solid var(--border-light);
+      border-radius: 3px;
+      padding: 12px;
+      font-size: 12px;
+      font-family: monospace;
+      white-space: pre-wrap;
+      max-height: 200px;
+      overflow-y: auto;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+
+    /* Manufacturer routing table */
+    .mfr-routing-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .mfr-routing-row input {
+      font-size: 12px;
+      padding: 6px 8px;
+    }
+    .mfr-routing-row button {
+      padding: 6px 10px;
+      font-size: 11px;
+    }
+    .recent-recipients {
+      margin-top: 10px;
+      font-size: 12px;
+    }
+    .recent-recipients strong {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-label);
+      margin-bottom: 6px;
+    }
+    .recipient-chip {
+      display: inline-block;
+      padding: 4px 10px;
+      background: rgba(46,125,233,0.1);
+      border: 1px solid rgba(46,125,233,0.3);
+      border-radius: 12px;
+      font-size: 11px;
+      cursor: pointer;
+      margin: 2px;
+      color: var(--accent-primary);
+    }
+    .recipient-chip:hover {
+      background: rgba(46,125,233,0.2);
+    }
+
     /* Print */
     @media print {
       .no-print {
@@ -630,6 +895,29 @@
   <div class="container">
     <div class="print-header">Voigt-Abernathy | Equipment Application Data</div>
 
+    <!-- Quote Type Toggle -->
+    <div class="quote-type-bar no-print">
+      <label>Quote Type</label>
+      <div class="quote-type-buttons">
+        <button class="qt-btn active-budgetary" id="btnBudgetary" onclick="setQuoteType('Budgetary')">Budgetary</button>
+        <button class="qt-btn" id="btnFirm" onclick="setQuoteType('Firm')">Firm</button>
+      </div>
+      <span class="quote-type-note" id="quoteTypeNote">Assumptions may be made where data is missing.</span>
+    </div>
+
+    <!-- Options Toggle -->
+    <div class="options-bar no-print" id="optionsBar" style="display:none;">
+      <label>Options</label>
+      <div class="options-tabs" id="optionsTabs"></div>
+      <button class="qt-btn" style="font-size:11px;padding:6px 12px;" onclick="toggleMultipleOptions()">Disable Multiple Options</button>
+    </div>
+
+    <!-- Missing Fields Banner -->
+    <div class="missing-fields-banner" id="missingBanner">
+      <strong id="missingBannerTitle">Missing Required Fields</strong>
+      <ul id="missingBannerList"></ul>
+    </div>
+
     <!-- Equipment Selector -->
     <div class="equipment-selector no-print">
       <label for="equipmentSelect">Select Equipment Type</label>
@@ -650,6 +938,7 @@
         <optgroup label="HEAT TRANSFER &amp; MIXING">
           <option value="heat-exchanger">Heat Exchanger</option>
           <option value="mixer">Mixer</option>
+          <option value="agitator">Agitator</option>
         </optgroup>
         <optgroup label="FILTRATION">
           <option value="filter-press">Filter Press</option>
@@ -664,6 +953,8 @@
           <option value="pe-tank">Tank — Polyethylene</option>
           <option value="asme-tank">Tank — ASME / Pressure Vessel</option>
           <option value="pneumatic-conveying">Solids — Pneumatic Conveying</option>
+          <option value="rotary-valve">Rotary Valve (Solids)</option>
+          <option value="blower">Blower — Rotary Lobe / Screw</option>
         </optgroup>
       </select>
     </div>
@@ -728,21 +1019,79 @@
 
     <!-- Action Buttons -->
     <div class="actions no-print">
-      <button class="primary" id="copyBtn" onclick="copyToClipboard()">
-        Copy to Clipboard
-      </button>
-      <button class="secondary" id="printBtn" onclick="window.print()">
-        Print / Save PDF
-      </button>
-      <button class="primary" id="emailBtn" onclick="emailToInsideSales()">
-        Email to Inside Sales
-      </button>
-      <button class="crm-btn" id="crmBtn" onclick="logToCRM()">
-        Log to CRM
-      </button>
-      <button class="danger" id="clearBtn" onclick="showClearConfirm()">
-        Clear Form
-      </button>
+      <button class="primary" id="copyBtn" onclick="copyToClipboard()">Copy to Clipboard</button>
+      <button class="secondary" id="printBtn" onclick="window.print()">Print / Save PDF</button>
+      <button class="primary" id="emailBtn" onclick="emailToInsideSales()">Email to Inside Sales</button>
+      <button class="mfr-btn" id="mfrBtn" onclick="openMfrEmail()">Email to Manufacturer</button>
+      <button class="crm-btn" id="crmBtn" onclick="logToCRM()">Log to CRM</button>
+      <button class="log-deal-btn" id="logDealBtn" onclick="openLogDeal()">Log Deal</button>
+      <button class="secondary" id="multiOptBtn" onclick="toggleMultipleOptions()">+ Multiple Options</button>
+      <button class="danger" id="clearBtn" onclick="showClearConfirm()">Clear Form</button>
+    </div>
+  </div>
+
+  <!-- Log Deal Modal -->
+  <div class="modal" id="logDealModal">
+    <div class="modal-content wide">
+      <h3>Log Deal</h3>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">Creates a local RFQ folder + PDF and generates a HubSpot handoff package for the update-record skill.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+        <div class="form-group">
+          <label>Deal / RFQ Number</label>
+          <input type="text" id="logDealNumber" placeholder="e.g. VA26-702-DF001">
+        </div>
+        <div class="form-group">
+          <label>Short Description</label>
+          <input type="text" id="logDealDesc" placeholder="e.g. Centrifugal Pump Replacement">
+        </div>
+      </div>
+      <div style="margin-bottom:10px;font-size:12px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-label);">HubSpot Handoff Package</div>
+      <div class="handoff-block" id="logDealHandoff"></div>
+      <div class="modal-buttons" style="grid-template-columns:1fr 1fr 1fr;">
+        <button class="secondary" onclick="closeLogDeal()">Cancel</button>
+        <button class="primary" onclick="copyHandoff()">Copy Handoff</button>
+        <button class="log-deal-btn" onclick="createDealFolder()">Create Folder + PDF</button>
+      </div>
+      <div id="logDealStatus" style="margin-top:10px;font-size:12px;color:var(--text-secondary);"></div>
+    </div>
+  </div>
+
+  <!-- Email to Manufacturer Modal -->
+  <div class="modal" id="mfrModal">
+    <div class="modal-content wide">
+      <h3>Email to Manufacturer</h3>
+      <p style="font-size:13px;color:var(--text-secondary);margin-bottom:14px;">Select or enter the recipient. The RFQ data will be attached as the email body.</p>
+      <div class="form-group" style="margin-bottom:12px;">
+        <label>To (Manufacturer / Rep)</label>
+        <input type="email" id="mfrToEmail" placeholder="manufacturer@example.com">
+      </div>
+      <div class="form-group" style="margin-bottom:12px;">
+        <label>CC (optional)</label>
+        <input type="email" id="mfrCcEmail" placeholder="inside.sales@voigtab.com">
+      </div>
+      <div class="recent-recipients" id="recentRecipientsBlock" style="display:none;">
+        <strong>Recent / Suggested</strong>
+        <div id="recentRecipientChips"></div>
+      </div>
+      <div style="margin-top:12px;margin-bottom:6px;font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-label);">Default Routing (by equipment type)</div>
+      <div id="mfrRoutingTable" style="margin-bottom:12px;max-height:160px;overflow-y:auto;"></div>
+      <div class="modal-buttons" style="grid-template-columns:1fr 1fr 1fr;">
+        <button class="secondary" onclick="closeMfrModal()">Cancel</button>
+        <button class="secondary" onclick="saveRoutingTable()">Save Routing</button>
+        <button class="mfr-btn" onclick="sendMfrEmail()">Open Email Draft</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Proceed Despite Missing Fields Modal -->
+  <div class="modal" id="missingConfirmModal">
+    <div class="modal-content narrow">
+      <h3 id="missingConfirmTitle">Missing Required Fields</h3>
+      <p id="missingConfirmMsg" style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;"></p>
+      <div class="modal-buttons">
+        <button class="secondary" onclick="closeMissingConfirm()">Go Back</button>
+        <button class="primary" id="missingConfirmProceedBtn" onclick="proceedDespiteMissing()">Proceed Anyway</button>
+      </div>
     </div>
   </div>
 
@@ -1778,6 +2127,168 @@
         ]
       },
       {
+        id: 'blower',
+        label: 'Blower — Rotary Lobe / Screw',
+        sections: [
+          {
+            title: 'Gas / Air Properties',
+            fields: [
+              { id: 'blowerGas', label: 'Gas / Air Description', type: 'text', required: true },
+              { id: 'blowerMolWeight', label: 'Molecular Weight', type: 'number' },
+              { id: 'blowerTemp', label: 'Inlet Temperature', type: 'number', unit: '°F', required: true },
+              { id: 'blowerHumidity', label: 'Relative Humidity', type: 'number', unit: '%' },
+              { id: 'blowerHazardous', label: 'Hazardous / Flammable?', type: 'radio', options: ['Yes', 'No'] }
+            ]
+          },
+          {
+            title: 'Performance Requirements',
+            fields: [
+              { id: 'blowerFlowACFM', label: 'Flow Rate (ACFM)', type: 'number', unit: 'ACFM' },
+              { id: 'blowerFlowSCFM', label: 'Flow Rate (SCFM)', type: 'number', unit: 'SCFM' },
+              { id: 'blowerInletPressure', label: 'Inlet Pressure', type: 'number', unit: 'psig', required: true },
+              { id: 'blowerDischargePressure', label: 'Discharge Pressure', type: 'number', unit: 'psig', required: true },
+              { id: 'blowerDiffPressure', label: 'Differential Pressure', type: 'number', unit: 'psig' },
+              { id: 'blowerVacOrPress', label: 'Application', type: 'radio', options: ['Pressure', 'Vacuum', 'Both'] },
+              { id: 'blowerService', label: 'Service', type: 'radio', options: ['Continuous', 'Intermittent'] }
+            ]
+          },
+          {
+            title: 'Motor / Electrical',
+            fields: [
+              { id: 'blowerVoltage', label: 'Voltage', type: 'text', unit: 'V' },
+              { id: 'blowerPhase', label: 'Phase', type: 'select', options: ['1ph', '3ph'] },
+              { id: 'blowerFrequency', label: 'Frequency', type: 'select', options: ['60', '50'] },
+              { id: 'blowerEnclosure', label: 'Motor Enclosure', type: 'select', options: ['TEFC', 'Explosion Proof', 'ODP'] },
+              { id: 'blowerVFD', label: 'VFD Required?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'blowerAreaClass', label: 'Area Classification', type: 'select', options: ['Non-Hazardous', 'Class I Div 1', 'Class I Div 2'] }
+            ]
+          },
+          {
+            title: 'Installation',
+            fields: [
+              { id: 'blowerLocation', label: 'Location', type: 'radio', options: ['Indoor', 'Outdoor'] },
+              { id: 'blowerElevation', label: 'Elevation', type: 'number', unit: 'ft ASL' },
+              { id: 'blowerAmbientMin', label: 'Ambient Temp Min', type: 'number', unit: '°F' },
+              { id: 'blowerAmbientMax', label: 'Ambient Temp Max', type: 'number', unit: '°F' },
+              { id: 'blowerNotes', label: 'Additional Notes', type: 'textarea' }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'agitator',
+        label: 'Agitator',
+        sections: [
+          {
+            title: 'Application',
+            fields: [
+              { id: 'agitAppDesc', label: 'Application Description', type: 'textarea', required: true },
+              { id: 'agitObjective', label: 'Mixing Objective', type: 'checkboxes', options: ['Blending', 'Solid Suspension', 'Heat Transfer', 'Gas Dispersion', 'Emulsification', 'Reaction'] },
+              { id: 'agitOperation', label: 'Operation', type: 'radio', options: ['Batch', 'Continuous'] }
+            ]
+          },
+          {
+            title: 'Fluid Properties',
+            fields: [
+              { id: 'agitFluid', label: 'Fluid / Product Name', type: 'text', required: true },
+              { id: 'agitSG', label: 'Specific Gravity', type: 'number', required: true },
+              { id: 'agitViscosity', label: 'Viscosity', type: 'number', unit: 'cP', required: true },
+              { id: 'agitTemp', label: 'Operating Temperature', type: 'number', unit: '°F' },
+              { id: 'agitSolids', label: 'Solids Content', type: 'number', unit: '% by wt' },
+              { id: 'agitCorrosive', label: 'Corrosive?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'agitHazardous', label: 'Hazardous / Flammable?', type: 'radio', options: ['Yes', 'No'] }
+            ]
+          },
+          {
+            title: 'Vessel',
+            fields: [
+              { id: 'agitVesselDia', label: 'Vessel Diameter', type: 'number', unit: 'in.', required: true },
+              { id: 'agitVesselHeight', label: 'Vessel Straight Side Height', type: 'number', unit: 'in.' },
+              { id: 'agitLiquidLevel', label: 'Max Working Liquid Level', type: 'number', unit: 'in.', required: true },
+              { id: 'agitVolume', label: 'Volume', type: 'number', unit: 'gallons' },
+              { id: 'agitBottomType', label: 'Bottom Type', type: 'select', options: ['Flat', 'Conical', 'Elliptical', 'Dish'] },
+              { id: 'agitTopType', label: 'Top Type', type: 'select', options: ['Open', 'Closed Flat', 'Closed Dome'] },
+              { id: 'agitBaffles', label: 'Baffles Present?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'agitDesignPressure', label: 'Design Pressure', type: 'number', unit: 'psig' },
+              { id: 'agitDesignTemp', label: 'Design Temperature', type: 'number', unit: '°F' }
+            ]
+          },
+          {
+            title: 'Impeller / Shaft',
+            fields: [
+              { id: 'agitImpellerType', label: 'Impeller Type', type: 'select', options: ['Axial Flow', 'Radial Flow', 'High Efficiency Axial', 'Hydrofoil', 'Retreat Curve', 'Gate', 'Anchor', 'Helical Ribbon'] },
+              { id: 'agitNumImpellers', label: 'Number of Impellers', type: 'number' },
+              { id: 'agitShaftLength', label: 'Shaft Length (center of impeller to mounting)', type: 'number', unit: 'in.' },
+              { id: 'agitShaftMaterial', label: 'Shaft Material', type: 'select', options: ['304SS', '316SS', 'Carbon Steel', 'Hastelloy C-276', 'Other'] },
+              { id: 'agitImpellerMaterial', label: 'Impeller Material', type: 'select', options: ['304SS', '316SS', 'Carbon Steel', 'Polypropylene', 'FRP', 'Other'] },
+              { id: 'agitSealType', label: 'Seal Type', type: 'select', options: ['Stuffing Box', 'Mechanical Seal — Single', 'Mechanical Seal — Double', 'Lip Seal', 'None (open)'] }
+            ]
+          },
+          {
+            title: 'Motor / Drive',
+            fields: [
+              { id: 'agitVoltage', label: 'Voltage', type: 'text', unit: 'V' },
+              { id: 'agitPhase', label: 'Phase', type: 'select', options: ['1ph', '3ph'] },
+              { id: 'agitFrequency', label: 'Frequency', type: 'select', options: ['60', '50'] },
+              { id: 'agitEnclosure', label: 'Motor Enclosure', type: 'select', options: ['TEFC', 'Explosion Proof', 'TENV'] },
+              { id: 'agitVFD', label: 'VFD / Speed Control?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'agitAreaClass', label: 'Area Classification', type: 'select', options: ['Non-Hazardous', 'Class I Div 1', 'Class I Div 2'] },
+              { id: 'agitMountType', label: 'Mounting Type', type: 'select', options: ['Flange Top Entry', 'Adj Beam Top Entry', 'Side Entry', 'Bottom Entry'] }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'rotary-valve',
+        label: 'Rotary Valve (Solids)',
+        sections: [
+          {
+            title: 'Application',
+            fields: [
+              { id: 'rvPurpose', label: 'Valve Purpose', type: 'radio', options: ['Airlock', 'Feeder', 'Feeder + Airlock'], required: true },
+              { id: 'rvReplacement', label: 'Replacement?', type: 'radio', options: ['Yes', 'No'] },
+              { id: 'rvExistingMfr', label: 'Existing Manufacturer', type: 'text' },
+              { id: 'rvExistingModel', label: 'Existing Model', type: 'text' }
+            ]
+          },
+          {
+            title: 'Material Properties',
+            fields: [
+              { id: 'rvMaterial', label: 'Material / Product Name', type: 'text', required: true },
+              { id: 'rvBulkDensity', label: 'Bulk Density', type: 'number', unit: 'lbs/ft³', required: true },
+              { id: 'rvParticleSize', label: 'Particle Size', type: 'text', unit: 'microns or mesh' },
+              { id: 'rvTemp', label: 'Material Temperature', type: 'number', unit: '°F' },
+              { id: 'rvParticleChar', label: 'Particle Characteristics', type: 'checkboxes', options: ['Powder', 'Granular', 'Fibrous', 'Sticky', 'Pellet', 'Corrosive', 'Abrasive'] },
+              { id: 'rvAngleRepose', label: 'Angle of Repose', type: 'number', unit: 'degrees' },
+              { id: 'rvExplosive', label: 'Explosive / Combustible?', type: 'radio', options: ['Yes', 'No'] }
+            ]
+          },
+          {
+            title: 'Process Conditions',
+            fields: [
+              { id: 'rvCapacityLbHr', label: 'Capacity', type: 'number', unit: 'lb/hr', required: true },
+              { id: 'rvCapacityCuFt', label: 'Capacity', type: 'number', unit: 'cu ft/hr' },
+              { id: 'rvPressureAbove', label: 'Pressure Above Valve', type: 'number', unit: 'PSI' },
+              { id: 'rvPressureBelow', label: 'Pressure Below Valve', type: 'number', unit: 'PSI' },
+              { id: 'rvDiffPressure', label: 'Differential Pressure', type: 'number', unit: 'PSI' }
+            ]
+          },
+          {
+            title: 'Construction / Requirements',
+            fields: [
+              { id: 'rvInletFlange', label: 'Inlet Flange Size', type: 'text' },
+              { id: 'rvOutletFlange', label: 'Outlet Flange Size', type: 'text' },
+              { id: 'rvRotorMaterial', label: 'Rotor Material', type: 'select', options: ['Carbon Steel', '304SS', '316SS', 'Aluminum', 'Other'] },
+              { id: 'rvHousingMaterial', label: 'Housing Material', type: 'select', options: ['Carbon Steel', '304SS', '316SS', 'Aluminum', 'Other'] },
+              { id: 'rvDrivetype', label: 'Drive Type', type: 'select', options: ['Electric Motor + Gearbox', 'Bare Shaft', 'Chain Drive'] },
+              { id: 'rvVoltage', label: 'Voltage', type: 'text', unit: 'V' },
+              { id: 'rvAreaClass', label: 'Area Classification', type: 'select', options: ['Non-Hazardous', 'Class I Div 1', 'Class I Div 2'] },
+              { id: 'rvSpecialReq', label: 'Special Requirements', type: 'textarea' }
+            ]
+          }
+        ]
+      },
+      {
         id: 'airlock-valve',
         label: 'Rotary Airlock Valve',
         sections: [
@@ -1839,22 +2350,7 @@
       window.scrollTo(0, 0);
     }
 
-    function renderFormSections(sections) {
-      const container = document.getElementById('formSections');
-      container.innerHTML = sections.map((section, sectionIdx) => `
-        <div class="form-card">
-          <div class="section-header" onclick="toggleSection(this)">
-            <h4>${section.title}</h4>
-            <span class="section-toggle ${sectionIdx === 0 ? 'open' : ''}">▼</span>
-          </div>
-          <div class="section-content ${sectionIdx === 0 ? 'open' : ''}">
-            <div class="section-grid">
-              ${section.fields.map(field => renderField(field)).join('')}
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
+    // renderFormSections is defined below with skid section support
 
     function renderField(field) {
       const required = field.required ? 'required' : '';
@@ -1932,96 +2428,7 @@
       content.classList.toggle('open');
     }
 
-    function copyToClipboard() {
-      const text = generateFormText();
-      navigator.clipboard.writeText(text).then(() => {
-        showToast('Copied to clipboard!');
-      }).catch(() => {
-        showToast('Failed to copy');
-      });
-    }
-
-    function generateFormText() {
-      const headerData = {
-        'Customer Name': document.getElementById('headerCustomerName').value,
-        'Company': document.getElementById('headerCompany').value,
-        'Phone': document.getElementById('headerPhone').value,
-        'Email': document.getElementById('headerEmail').value,
-        'Date': document.getElementById('headerDate').value,
-        'Project / Tag #': document.getElementById('headerProjectTag').value,
-        'Rep': document.getElementById('headerRep').value,
-        'Notes': document.getElementById('headerNotes').value
-      };
-
-      let text = 'VOIGT-ABERNATHY — EQUIPMENT APPLICATION DATA\n';
-      text += '='.repeat(50) + '\n\n';
-
-      const select = document.getElementById('equipmentSelect');
-      if (select.value) {
-        const equipment = equipmentTypes.find(e => e.id === select.value);
-        text += `Equipment Type: ${equipment.label}\n\n`;
-      }
-
-      text += 'CUSTOMER INFORMATION\n';
-      text += '-'.repeat(50) + '\n';
-      Object.entries(headerData).forEach(([key, val]) => {
-        if (val) text += `${key}: ${val}\n`;
-      });
-
-      text += '\nFORM DATA\n';
-      text += '-'.repeat(50) + '\n';
-
-      document.querySelectorAll('.form-card').forEach(card => {
-        const sectionTitle = card.querySelector('.section-header h4').textContent;
-        text += `\n[${sectionTitle}]\n`;
-
-        card.querySelectorAll('.form-group').forEach(group => {
-          const label = group.querySelector('label');
-          if (!label) return;
-          const labelText = label.textContent.replace(' *', '').trim();
-
-          const input = group.querySelector('input, textarea, select');
-          if (!input) return;
-
-          let value = '';
-          if (input.type === 'checkbox' || input.type === 'radio') {
-            const checked = group.querySelectorAll('input:checked');
-            value = Array.from(checked).map(c => c.value).join(', ');
-          } else {
-            value = input.value;
-          }
-
-          if (value) text += `  ${labelText}: ${value}\n`;
-        });
-      });
-
-      return text;
-    }
-
-    function emailToInsideSales() {
-      const text = generateFormText();
-      const company = document.getElementById('headerCompany').value || 'Unknown';
-      const today = new Date().toLocaleDateString();
-
-      const select = document.getElementById('equipmentSelect');
-      let equipmentType = 'Equipment RFQ';
-      if (select.value) {
-        const equipment = equipmentTypes.find(e => e.id === select.value);
-        equipmentType = equipment.label;
-      }
-
-      const subject = `Equipment Application Data – ${equipmentType} – ${company} – ${today}`;
-
-      let body = text;
-      if (body.length > 2000) {
-        body = body.substring(0, 1900) + '\n\n... [Full data copied to clipboard — please paste]';
-        navigator.clipboard.writeText(text);
-      }
-
-      const mailtoLink = `mailto:mssales@voigtab.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      window.location.href = mailtoLink;
-      showToast('Email draft opened in your mail client');
-    }
+    // copyToClipboard, generateFormText, emailToInsideSales defined below (with quote type + missing fields support)
 
     function logToCRM() {
       const company = document.getElementById('headerCompany').value;
@@ -2045,7 +2452,7 @@
       }
 
       // Build the full form text for the note
-      const formText = generateFormText();
+      const formText = buildFullOutputText();
 
       // Build HubSpot search URL — searches for the company/contact
       const searchQuery = encodeURIComponent(company || customerName);
@@ -2109,6 +2516,544 @@
       document.getElementById('crmModal').classList.remove('active');
       closeClearConfirm();
       showToast('Form cleared');
+    }
+
+    // ===== QUOTE TYPE =====
+    let quoteType = 'Budgetary';
+
+    function setQuoteType(type) {
+      quoteType = type;
+      document.getElementById('btnBudgetary').className = 'qt-btn' + (type === 'Budgetary' ? ' active-budgetary' : '');
+      document.getElementById('btnFirm').className = 'qt-btn' + (type === 'Firm' ? ' active-firm' : '');
+      const note = document.getElementById('quoteTypeNote');
+      if (type === 'Budgetary') {
+        note.textContent = 'Assumptions may be made where data is missing.';
+        note.className = 'quote-type-note';
+        document.body.classList.remove('firm-mode');
+      } else {
+        note.textContent = 'Required fields must be complete before copying or emailing.';
+        note.className = 'quote-type-note firm';
+        document.body.classList.add('firm-mode');
+      }
+      clearMissingHighlights();
+    }
+
+    // ===== REQUIRED FIELDS =====
+    const ALWAYS_REQUIRED_IDS = ['headerCustomerName', 'headerCompany'];
+    const EQUIPMENT_REQUIRED_FIELD_LABELS = ['Fluid/Liquid Name', 'Fluid Pumped', 'Fluid to be Filtered/Strained',
+      'Process Fluid/Chemical', 'Gas Name/Chemical Formula', 'Gas Type', 'Shell Side Fluid', 'Tube Side Fluid',
+      'Product Description', 'Application Description', 'Purpose', 'Fluid / Product Name', 'Material / Product Name',
+      'Product to be Conveyed', 'Gas / Air Description'];
+    const EQUIPMENT_REQUIRED_PARAM_LABELS = ['Flow Rate', 'Capacity', 'Inlet Pressure', 'Discharge Pressure',
+      'Inlet Temperature', 'Pumping Temperature', 'Temperature'];
+
+    function getMissingFields() {
+      const missing = [];
+      ALWAYS_REQUIRED_IDS.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && !el.value.trim()) {
+          const label = el.closest('.form-group')?.querySelector('label');
+          missing.push({ el, label: label ? label.textContent.replace(' *','').trim() : id, section: 'Customer Information' });
+        }
+      });
+
+      const formSections = document.getElementById('formSections');
+      if (formSections.classList.contains('active')) {
+        formSections.querySelectorAll('.form-card').forEach(card => {
+          const sectionTitle = card.querySelector('.section-header h4')?.textContent || '';
+          card.querySelectorAll('.form-group').forEach(group => {
+            const lbl = group.querySelector('label');
+            if (!lbl) return;
+            const labelText = lbl.textContent.replace(' *','').trim();
+            const isFluid = EQUIPMENT_REQUIRED_FIELD_LABELS.some(r => labelText.includes(r));
+            const isParam = EQUIPMENT_REQUIRED_PARAM_LABELS.some(r => labelText.startsWith(r));
+            if (!isFluid && !isParam) return;
+            const input = group.querySelector('input[type="text"], input[type="number"], textarea, select');
+            if (input && !input.value.trim()) {
+              missing.push({ el: input, label: labelText, section: sectionTitle });
+            }
+          });
+        });
+      }
+      return missing;
+    }
+
+    function clearMissingHighlights() {
+      document.querySelectorAll('.req-missing').forEach(el => el.classList.remove('req-missing'));
+      document.getElementById('missingBanner').classList.remove('show');
+    }
+
+    function showMissingBanner(missing, blocking) {
+      const banner = document.getElementById('missingBanner');
+      const title = document.getElementById('missingBannerTitle');
+      const list = document.getElementById('missingBannerList');
+      missing.forEach(m => m.el && m.el.classList.add('req-missing'));
+      title.textContent = blocking ? 'FIRM QUOTE — Required Fields Missing' : 'Missing Recommended Fields';
+      banner.className = 'missing-fields-banner show' + (blocking ? '' : ' warn');
+      list.innerHTML = missing.map(m => `<li><strong>${m.section}</strong> — ${m.label}</li>`).join('');
+    }
+
+    // Callback after confirming to proceed despite missing
+    let _pendingAction = null;
+
+    function checkAndProceed(action) {
+      clearMissingHighlights();
+      const missing = getMissingFields();
+      if (missing.length === 0) {
+        action();
+        return;
+      }
+      if (quoteType === 'Firm') {
+        showMissingBanner(missing, true);
+        _pendingAction = action;
+        const msg = `This is a Firm quote. The following ${missing.length} field(s) are empty:\n` +
+          missing.map(m => `• ${m.label}`).join('\n') + '\n\nProceed anyway?';
+        document.getElementById('missingConfirmTitle').textContent = 'Firm Quote — Missing Fields';
+        document.getElementById('missingConfirmMsg').textContent = msg;
+        document.getElementById('missingModal') || (()=>{})(); // guard
+        document.getElementById('missingConfirmModal').classList.add('active');
+      } else {
+        showMissingBanner(missing, false);
+        action();
+      }
+    }
+
+    function closeMissingConfirm() {
+      document.getElementById('missingConfirmModal').classList.remove('active');
+      _pendingAction = null;
+    }
+
+    function proceedDespiteMissing() {
+      document.getElementById('missingConfirmModal').classList.remove('active');
+      if (_pendingAction) { _pendingAction(); _pendingAction = null; }
+    }
+
+    // ===== MULTIPLE OPTIONS =====
+    let multipleOptionsEnabled = false;
+    let currentOption = 1;
+    let optionEquipmentData = {};  // { 1: {equipId, fieldValues}, 2: {...} }
+
+    function toggleMultipleOptions() {
+      if (multipleOptionsEnabled) {
+        multipleOptionsEnabled = false;
+        currentOption = 1;
+        optionEquipmentData = {};
+        document.getElementById('optionsBar').style.display = 'none';
+        document.getElementById('multiOptBtn').textContent = '+ Multiple Options';
+        return;
+      }
+      multipleOptionsEnabled = true;
+      currentOption = 1;
+      optionEquipmentData = {};
+      saveCurrentOptionData(1);
+      document.getElementById('optionsBar').style.display = 'flex';
+      document.getElementById('multiOptBtn').style.display = 'none';
+      renderOptionsTabs();
+    }
+
+    function saveCurrentOptionData(optNum) {
+      const equipId = document.getElementById('equipmentSelect').value;
+      if (!equipId) return;
+      const fields = {};
+      document.querySelectorAll('#formSections input, #formSections textarea, #formSections select').forEach(el => {
+        if (el.type === 'radio' || el.type === 'checkbox') {
+          fields[el.id] = el.checked;
+        } else {
+          fields[el.id] = el.value;
+        }
+      });
+      optionEquipmentData[optNum] = { equipId, fields };
+    }
+
+    function loadOptionData(optNum) {
+      const data = optionEquipmentData[optNum];
+      if (!data) {
+        // New blank option — keep header but clear equipment
+        document.getElementById('equipmentSelect').value = '';
+        document.getElementById('formSections').innerHTML = '';
+        document.getElementById('formSections').classList.remove('active');
+        return;
+      }
+      document.getElementById('equipmentSelect').value = data.equipId;
+      const equipment = equipmentTypes.find(e => e.id === data.equipId);
+      if (equipment) {
+        renderFormSections(equipment.sections);
+        document.getElementById('formSections').classList.add('active');
+        // Restore field values
+        Object.entries(data.fields).forEach(([id, val]) => {
+          const el = document.getElementById(id);
+          if (!el) return;
+          if (el.type === 'radio' || el.type === 'checkbox') el.checked = val;
+          else el.value = val;
+        });
+      }
+    }
+
+    function renderOptionsTabs() {
+      const container = document.getElementById('optionsTabs');
+      const keys = Object.keys(optionEquipmentData).map(Number).sort((a,b)=>a-b);
+      if (!keys.includes(1)) keys.unshift(1);
+      container.innerHTML = keys.map(n => `
+        <button class="opt-tab ${n === currentOption ? 'active' : ''}" onclick="switchOption(${n})">OPTION ${n}</button>
+      `).join('') + `<button class="opt-tab add-opt" onclick="addOption()">+ Add Option</button>`;
+    }
+
+    function switchOption(n) {
+      saveCurrentOptionData(currentOption);
+      currentOption = n;
+      loadOptionData(n);
+      renderOptionsTabs();
+    }
+
+    function addOption() {
+      saveCurrentOptionData(currentOption);
+      const newN = Math.max(...Object.keys(optionEquipmentData).map(Number), 1) + 1;
+      optionEquipmentData[newN] = null; // placeholder — blank
+      currentOption = newN;
+      loadOptionData(newN);
+      renderOptionsTabs();
+    }
+
+    // ===== SKID SECTION =====
+    const SKID_SECTION = {
+      title: 'Skid / System Scope',
+      fields: [
+        { id: 'skidRequired', label: 'Skid Required?', type: 'radio', options: ['Yes', 'No'] },
+        { id: 'skidMaterial', label: 'Skid Material', type: 'select', options: ['304SS', '316SS', 'Carbon Steel', 'FRP', 'Other'] },
+        { id: 'skidPiping', label: 'Piping Included?', type: 'radio', options: ['Yes', 'No'] },
+        { id: 'skidInstrumentation', label: 'Instrumentation Included?', type: 'radio', options: ['Yes', 'No'] },
+        { id: 'skidControlPanel', label: 'Control Panel', type: 'select', options: ['None', 'Terminal Box', 'Full Panel'] },
+        { id: 'skidNEMA', label: 'NEMA Rating', type: 'select', options: ['4', '4X', '7', 'Other'] },
+        { id: 'skidNotes', label: 'Skid / System Notes', type: 'textarea' }
+      ]
+    };
+
+    // Override renderFormSections to always append skid section
+    function renderFormSections(sections) {
+      const container = document.getElementById('formSections');
+      const allSections = [...sections, SKID_SECTION];
+      container.innerHTML = allSections.map((section, sectionIdx) => `
+        <div class="form-card ${section.title === 'Skid / System Scope' ? 'skid-section-wrapper' : ''}">
+          <div class="section-header" onclick="toggleSection(this)">
+            <h4>${section.title}</h4>
+            <span class="section-toggle ${sectionIdx === 0 ? 'open' : ''}">▼</span>
+          </div>
+          <div class="section-content ${sectionIdx === 0 ? 'open' : ''}">
+            <div class="section-grid">
+              ${section.fields.map(field => renderField(field)).join('')}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ===== GENERATE FORM TEXT (improved) =====
+    function generateFormText(optionLabel) {
+      const customerName = document.getElementById('headerCustomerName').value;
+      const company = document.getElementById('headerCompany').value;
+      const phone = document.getElementById('headerPhone').value;
+      const email = document.getElementById('headerEmail').value;
+      const date = document.getElementById('headerDate').value;
+      const projectTag = document.getElementById('headerProjectTag').value;
+      const rep = document.getElementById('headerRep').value;
+      const insideSales = document.getElementById('headerInsideSales').value;
+      const notes = document.getElementById('headerNotes').value;
+
+      const select = document.getElementById('equipmentSelect');
+      let equipmentLabel = '(not selected)';
+      if (select.value) {
+        const eq = equipmentTypes.find(e => e.id === select.value);
+        if (eq) equipmentLabel = eq.label;
+      }
+
+      const missing = getMissingFields();
+      const missingLabels = missing.map(m => m.label);
+
+      let text = 'VOIGT-ABERNATHY — EQUIPMENT APPLICATION DATA\n';
+      text += '='.repeat(52) + '\n';
+      text += `QUOTE TYPE: ${quoteType.toUpperCase()}`;
+      if (quoteType === 'Budgetary') text += '  (Assumptions may be made where data is missing)';
+      text += '\n';
+      if (optionLabel) text += `OPTION: ${optionLabel}\n`;
+      text += '='.repeat(52) + '\n\n';
+
+      text += `Equipment Type: ${equipmentLabel}\n\n`;
+
+      text += 'CUSTOMER INFORMATION\n' + '-'.repeat(52) + '\n';
+      const hdr = [
+        ['Customer Name', customerName],
+        ['Company', company],
+        ['Phone', phone],
+        ['Email', email],
+        ['Date', date],
+        ['Project / Tag #', projectTag],
+        ['Rep', rep],
+        ['Inside Sales', insideSales],
+        ['Notes', notes]
+      ];
+      hdr.forEach(([k, v]) => {
+        const isMissing = missingLabels.includes(k);
+        if (v) text += `  ${k}: ${v}\n`;
+        else if (isMissing) text += `  ${k}: [MISSING]\n`;
+      });
+
+      text += '\nFORM DATA\n' + '-'.repeat(52) + '\n';
+
+      document.querySelectorAll('#formSections .form-card').forEach(card => {
+        const sectionTitle = card.querySelector('.section-header h4').textContent;
+        let sectionText = '';
+        card.querySelectorAll('.form-group').forEach(group => {
+          const lbl = group.querySelector('label');
+          if (!lbl) return;
+          const labelText = lbl.textContent.replace(' *','').trim();
+          const inputs = group.querySelectorAll('input, textarea, select');
+          let value = '';
+          inputs.forEach(input => {
+            if (input.type === 'radio') {
+              if (input.checked) value = input.value;
+            } else if (input.type === 'checkbox') {
+              if (input.checked) value += (value ? ', ' : '') + input.value;
+            } else if (input.tagName === 'SELECT' || input.tagName === 'TEXTAREA' || input.type === 'text' || input.type === 'number' || input.type === 'date' || input.type === 'email' || input.type === 'tel') {
+              if (input.value) value = input.value;
+            }
+          });
+          const isMissing = missingLabels.includes(labelText);
+          if (value) sectionText += `  ${labelText}: ${value}\n`;
+          else if (isMissing) sectionText += `  ${labelText}: [MISSING]\n`;
+        });
+        if (sectionText) text += `\n[${sectionTitle}]\n` + sectionText;
+      });
+
+      return text;
+    }
+
+    function buildFullOutputText() {
+      if (!multipleOptionsEnabled) {
+        return generateFormText(null);
+      }
+      // Save current, then iterate all options
+      saveCurrentOptionData(currentOption);
+      let fullText = '';
+      const keys = Object.keys(optionEquipmentData).map(Number).sort((a,b)=>a-b);
+      keys.forEach(n => {
+        loadOptionData(n);
+        fullText += generateFormText(`OPTION ${n}`) + '\n' + '='.repeat(52) + '\n\n';
+      });
+      // restore current
+      loadOptionData(currentOption);
+      return fullText;
+    }
+
+    // Override copy
+    function copyToClipboard() {
+      checkAndProceed(() => {
+        const text = buildFullOutputText();
+        navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard!')).catch(() => showToast('Failed to copy'));
+      });
+    }
+
+    // Override email
+    function emailToInsideSales() {
+      checkAndProceed(() => {
+        const text = buildFullOutputText();
+        const company = document.getElementById('headerCompany').value || 'Unknown';
+        const today = new Date().toLocaleDateString();
+        const select = document.getElementById('equipmentSelect');
+        let eqType = 'Equipment RFQ';
+        if (select.value) { const eq = equipmentTypes.find(e => e.id === select.value); if (eq) eqType = eq.label; }
+        const subject = `Equipment Application Data – ${eqType} – ${company} – ${today}`;
+        let body = text;
+        if (body.length > 2000) {
+          body = body.substring(0, 1900) + '\n\n... [Full data copied to clipboard — paste below]';
+          navigator.clipboard.writeText(text);
+        }
+        window.location.href = `mailto:mssales@voigtab.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        showToast('Email draft opened');
+      });
+    }
+
+    // ===== LOG DEAL =====
+    function openLogDeal() {
+      const company = document.getElementById('headerCompany').value || '';
+      const customerName = document.getElementById('headerCustomerName').value || '';
+      const select = document.getElementById('equipmentSelect');
+      let eqLabel = '';
+      if (select.value) { const eq = equipmentTypes.find(e => e.id === select.value); if (eq) eqLabel = eq.label; }
+      const today = new Date();
+      const yy = String(today.getFullYear()).slice(2);
+      const yyyy = today.getFullYear();
+
+      // Auto-suggest deal number
+      const suggestedNum = `VA${yy}-702-DF001`;
+      if (!document.getElementById('logDealNumber').value) document.getElementById('logDealNumber').value = suggestedNum;
+      if (!document.getElementById('logDealDesc').value && eqLabel) document.getElementById('logDealDesc').value = eqLabel;
+
+      // Build handoff
+      const text = buildFullOutputText();
+      const handoff = buildHubSpotHandoff({ company, customerName, eqLabel, text, quoteType });
+      document.getElementById('logDealHandoff').textContent = handoff;
+      document.getElementById('logDealStatus').textContent = '';
+      document.getElementById('logDealModal').classList.add('active');
+    }
+
+    function buildHubSpotHandoff({ company, customerName, eqLabel, text, quoteType }) {
+      const date = new Date().toLocaleDateString();
+      return `=== HUBSPOT HANDOFF — update-record skill ===
+Date: ${date}
+Contact: ${customerName}
+Company: ${company}
+Equipment: ${eqLabel}
+Quote Type: ${quoteType}
+Deal Stage: Deal Qualified
+Action: Create new deal if not found, log RFQ activity, set follow-up task
+
+ACTIVITY NOTE:
+${text.substring(0, 1200)}${text.length > 1200 ? '\n... [see RFQ PDF for full data]' : ''}
+=== END HANDOFF ===`;
+    }
+
+    function closeLogDeal() {
+      document.getElementById('logDealModal').classList.remove('active');
+    }
+
+    function copyHandoff() {
+      const text = document.getElementById('logDealHandoff').textContent;
+      navigator.clipboard.writeText(text).then(() => showToast('Handoff copied — paste into update-record skill'));
+    }
+
+    function createDealFolder() {
+      const dealNum = document.getElementById('logDealNumber').value.trim();
+      const shortDesc = document.getElementById('logDealDesc').value.trim();
+      const company = document.getElementById('headerCompany').value || 'Unknown';
+      const customerName = document.getElementById('headerCustomerName').value || 'Unknown';
+      const yyyy = new Date().getFullYear();
+
+      if (!dealNum) { showToast('Enter a deal number first'); return; }
+
+      const folderName = `${dealNum}_${shortDesc.replace(/[^a-zA-Z0-9 ]/g,'').replace(/ /g,'_')}_${company.replace(/ /g,'_')}_${customerName.replace(/ /g,'_')}`;
+      const folderPath = `C:\\Users\\Daniel\\Claude_Home\\work\\02_Active_Deals\\${yyyy}\\${folderName}`;
+      const rfqText = buildFullOutputText();
+
+      // Build the handoff instruction
+      const instruction = `=== LOG DEAL INSTRUCTION ===
+Create folder: ${folderPath}\\
+Subfolders: Internal\\ and Customer Quote\\
+
+Save RFQ PDF to: ${folderPath}\\Customer Quote\\${dealNum}_${company.replace(/ /g,'_')}_RFQ.pdf
+
+RFQ PDF Content:
+${rfqText}
+
+Also run update-record with the handoff below:
+${document.getElementById('logDealHandoff').textContent}
+=== END INSTRUCTION ===`;
+
+      navigator.clipboard.writeText(instruction).then(() => {
+        document.getElementById('logDealStatus').textContent = 'Folder + PDF instruction copied. Paste into Cowork to execute, or run the update-record skill for the HubSpot handoff.';
+        showToast('Log Deal instruction copied to clipboard');
+      });
+    }
+
+    // ===== EMAIL TO MANUFACTURER =====
+    const MFR_ROUTING_KEY = 'va_mfr_routing';
+    const MFR_RECENT_KEY = 'va_mfr_recent';
+
+    function getRoutingTable() {
+      try { return JSON.parse(localStorage.getItem(MFR_ROUTING_KEY) || '{}'); } catch(e) { return {}; }
+    }
+
+    function saveRoutingTableData(data) {
+      localStorage.setItem(MFR_ROUTING_KEY, JSON.stringify(data));
+    }
+
+    function getRecentRecipients() {
+      try { return JSON.parse(localStorage.getItem(MFR_RECENT_KEY) || '[]'); } catch(e) { return []; }
+    }
+
+    function addRecentRecipient(email) {
+      if (!email) return;
+      let recent = getRecentRecipients();
+      recent = [email, ...recent.filter(r => r !== email)].slice(0, 8);
+      localStorage.setItem(MFR_RECENT_KEY, JSON.stringify(recent));
+    }
+
+    function openMfrEmail() {
+      const select = document.getElementById('equipmentSelect');
+      const eqId = select.value;
+      let eqLabel = '';
+      if (eqId) { const eq = equipmentTypes.find(e => e.id === eqId); if (eq) eqLabel = eq.label; }
+
+      // Pre-fill from routing table
+      const routing = getRoutingTable();
+      const suggested = routing[eqId] || '';
+      document.getElementById('mfrToEmail').value = suggested;
+      document.getElementById('mfrCcEmail').value = '';
+
+      // Render routing table editor
+      renderMfrRoutingTable(routing);
+
+      // Render recent recipients
+      const recent = getRecentRecipients();
+      const recentBlock = document.getElementById('recentRecipientsBlock');
+      const chipsEl = document.getElementById('recentRecipientChips');
+      if (recent.length > 0) {
+        recentBlock.style.display = 'block';
+        chipsEl.innerHTML = recent.map(r => `<span class="recipient-chip" onclick="document.getElementById('mfrToEmail').value='${r}'">${r}</span>`).join('');
+      } else {
+        recentBlock.style.display = 'none';
+      }
+
+      document.getElementById('mfrModal').classList.add('active');
+    }
+
+    function renderMfrRoutingTable(routing) {
+      const container = document.getElementById('mfrRoutingTable');
+      const rows = equipmentTypes.slice(0, 10).map(eq => `
+        <div class="mfr-routing-row">
+          <span style="font-size:11px;color:var(--text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${eq.label}">${eq.label}</span>
+          <input type="email" placeholder="mfr@example.com" value="${routing[eq.id] || ''}" id="mfrRoute_${eq.id}">
+        </div>
+      `).join('');
+      container.innerHTML = rows + `<div style="font-size:11px;color:var(--text-secondary);margin-top:4px;">Showing first 10 types. All are saved when you click Save Routing.</div>`;
+    }
+
+    function saveRoutingTable() {
+      const routing = getRoutingTable();
+      equipmentTypes.forEach(eq => {
+        const el = document.getElementById(`mfrRoute_${eq.id}`);
+        if (el && el.value) routing[eq.id] = el.value;
+      });
+      saveRoutingTableData(routing);
+      showToast('Routing table saved');
+    }
+
+    function sendMfrEmail() {
+      const to = document.getElementById('mfrToEmail').value.trim();
+      const cc = document.getElementById('mfrCcEmail').value.trim();
+      if (!to) { showToast('Enter a recipient email first'); return; }
+
+      addRecentRecipient(to);
+
+      const select = document.getElementById('equipmentSelect');
+      let eqLabel = 'Equipment RFQ';
+      if (select.value) { const eq = equipmentTypes.find(e => e.id === select.value); if (eq) eqLabel = eq.label; }
+      const company = document.getElementById('headerCompany').value || 'Unknown';
+      const today = new Date().toLocaleDateString();
+      const subject = `RFQ — ${eqLabel} — ${company} — ${today}`;
+      const body = buildFullOutputText();
+      let bodyTrunc = body;
+      if (bodyTrunc.length > 2000) {
+        bodyTrunc = bodyTrunc.substring(0, 1900) + '\n\n... [Full data copied to clipboard]';
+        navigator.clipboard.writeText(body);
+      }
+      const ccPart = cc ? `&cc=${encodeURIComponent(cc)}` : '';
+      window.location.href = `mailto:${encodeURIComponent(to)}?subject=${encodeURIComponent(subject)}${ccPart}&body=${encodeURIComponent(bodyTrunc)}`;
+      showToast('Manufacturer email draft opened');
+      closeMfrModal();
+    }
+
+    function closeMfrModal() {
+      document.getElementById('mfrModal').classList.remove('active');
     }
 
     // Init
